@@ -1,0 +1,117 @@
+/* ==========================================================================
+   IUCB EMPLOYEE TRUST - INSTITUTIONAL FINANCIAL DESIGN TOKENS
+   Deep Navy (#0B1F3A) / Clean Surface / Restrained Burgundy (#9E173C)
+   ========================================================================== */
+
+:root {
+  /* Brand & Core Palette */
+  --color-navy-950: #061224;
+  --color-navy-900: #0B1F3A; /* Primary Navy */
+  --color-navy-850: #0F2647;
+  --color-navy-800: #14325C;
+  --color-navy-700: #1A3E70;
+  --color-navy-600: #255494;
+  --color-navy-500: #2F68B4;
+
+  /* IUCB Institutional Burgundy Accent */
+  --color-burgundy-900: #5C0B21;
+  --color-burgundy-800: #7E122F;
+  --color-burgundy-700: #9E173C; /* IUCB Burgundy */
+  --color-burgundy-600: #B81E48;
+  --color-burgundy-500: #D32757;
+  --color-burgundy-100: #FCE7ED;
+  --color-burgundy-50:  #FFF1F4;
+
+  /* Surfaces & Neutrals */
+  --color-bg-app: #F6F8FA; /* App Background */
+  --color-bg-surface: #FFFFFF; /* Surface */
+  --color-bg-surface-subtle: #FAFBFC;
+  --color-bg-surface-active: #F0F3F7;
+  --color-bg-surface-hover: #F8FAFC;
+
+  /* Text & Content */
+  --color-text-primary: #172033; /* Primary Text */
+  --color-text-secondary: #667085; /* Secondary Text */
+  --color-text-muted: #8896AB;
+  --color-text-subtle: #98A2B3;
+  --color-text-inverse: #FFFFFF;
+
+  /* Borders & Dividers */
+  --color-border-subtle: #E3E8EF; /* Border */
+  --color-border-strong: #CBD5E1;
+  --color-border-focus: #0B1F3A;
+
+  /* Semantic - Status & Feedback */
+  --color-success: #16805C;
+  --color-success-bg: #EDF7F2;
+  --color-success-border: #B7E4CF;
+  --color-success-text: #16805C;
+  --color-success-icon: #16805C;
+
+  --color-warning: #B7791F;
+  --color-warning-bg: #FEF9EE;
+  --color-warning-border: #F8DC9E;
+  --color-warning-text: #945B0A;
+  --color-warning-icon: #B7791F;
+
+  --color-danger: #C53030;
+  --color-danger-bg: #FEF2F2;
+  --color-danger-border: #FECACA;
+  --color-danger-text: #C53030;
+  --color-danger-icon: #C53030;
+
+  --color-info-bg: #EFF6FF;
+  --color-info-border: #BFDBFE;
+  --color-info-text: #1E40AF;
+  --color-info-icon: #2F68B4;
+
+  --color-neutral-badge-bg: #F6F8FA;
+  --color-neutral-badge-border: #E3E8EF;
+  --color-neutral-badge-text: #344054;
+
+  /* 8px Spacing System */
+  --space-0-5: 4px;
+  --space-1: 8px;
+  --space-1-5: 12px;
+  --space-2: 16px;
+  --space-2-5: 20px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-8: 64px;
+
+  /* Typography Scale */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.8125rem;   /* 13px */
+  --text-base: 0.875rem;  /* 14px */
+  --text-md: 1rem;        /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+
+  /* Border Radii (Restrained 8-10px) */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-full: 9999px;
+
+  /* Subtle Enterprise Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(16, 24, 40, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(16, 24, 40, 0.06), 0 1px 2px -1px rgba(16, 24, 40, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(16, 24, 40, 0.06), 0 2px 4px -2px rgba(16, 24, 40, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(16, 24, 40, 0.08), 0 4px 6px -4px rgba(16, 24, 40, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(16, 24, 40, 0.1), 0 8px 10px -6px rgba(16, 24, 40, 0.04);
+  --shadow-modal: 0 20px 40px -10px rgba(11, 31, 58, 0.2);
+
+  /* Layout dimensions */
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 72px;
+  --header-height: 60px;
+}
