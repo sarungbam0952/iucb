@@ -68,7 +68,7 @@ export const UsersAndRoles: React.FC = () => {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
           <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: 'var(--color-navy-900)' }}>
-            Users & Role-Based Access Control
+            RBAC
           </h2>
           <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
             Manage authorized bank personnel, operational roles, and segregation of duties.
@@ -155,12 +155,12 @@ export const UsersAndRoles: React.FC = () => {
                   <td>
                     <span
                       className={`badge ${u.role === 'Admin'
-                          ? 'badge-rejected'
-                          : u.role === 'Data Entry'
-                            ? 'badge-submitted'
-                            : u.role === 'Trust Committee'
-                              ? 'badge-pending'
-                              : 'badge-neutral'
+                        ? 'badge-rejected'
+                        : u.role === 'Data Entry'
+                          ? 'badge-submitted'
+                          : u.role === 'Trust Committee'
+                            ? 'badge-pending'
+                            : 'badge-neutral'
                         }`}
                     >
                       {u.role}
