@@ -68,7 +68,7 @@ export const UsersAndRoles: React.FC = () => {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
           <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: 'var(--color-navy-900)' }}>
-            RBAC
+            Users & Role-Based Access Control
           </h2>
           <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
             Manage authorized bank personnel, operational roles, and segregation of duties.
