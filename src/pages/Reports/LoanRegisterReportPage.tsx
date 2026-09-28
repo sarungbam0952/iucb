@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { KpiCard } from '../../components/common/KpiCard';
+import { formatDate } from '../../utils/dateFormat';
 
 export const LoanRegisterReportPage: React.FC = () => {
   const {
@@ -90,49 +92,33 @@ export const LoanRegisterReportPage: React.FC = () => {
 
       {/* 4 SUMMARY METRIC CARDS */}
       <div className="kpi-grid">
-        <div className="kpi-card accent-navy">
-          <div className="kpi-header">
-            <span className="kpi-label">TOTAL SANCTIONED PRINCIPAL</span>
-            <div className="kpi-icon-wrap" style={{ background: '#EFF6FF', color: 'var(--color-navy-900)' }}>
-              <CreditCard size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(totalSanctioned)}</div>
-          <div className="kpi-desc">Cumulative borrowings across {loans.length} loan files</div>
-        </div>
+        <KpiCard
+          label="Total Sanctioned Principal"
+          value={formatCurrency(totalSanctioned)}
+          icon={CreditCard}
+          desc={`Cumulative borrowings across ${loans.length} loan files`}
+        />
 
-        <div className="kpi-card accent-burgundy">
-          <div className="kpi-header">
-            <span className="kpi-label">OUTSTANDING LOAN ASSET</span>
-            <div className="kpi-icon-wrap" style={{ background: 'var(--color-burgundy-50)', color: 'var(--color-burgundy-700)' }}>
-              <TrendingDown size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(totalOutstanding)}</div>
-          <div className="kpi-desc">100% secured by member PF corpus balances</div>
-        </div>
+        <KpiCard
+          label="Outstanding Loan Asset"
+          value={formatCurrency(totalOutstanding)}
+          icon={TrendingDown}
+          desc="100% secured by member PF corpus balances"
+        />
 
-        <div className="kpi-card accent-emerald">
-          <div className="kpi-header">
-            <span className="kpi-label">PORTFOLIO ARREARS RATE</span>
-            <div className="kpi-icon-wrap" style={{ background: '#ECFDF5', color: '#059669' }}>
-              <CheckCircle2 size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">0.0%</div>
-          <div className="kpi-desc">Zero defaults via automated monthly payroll deduction</div>
-        </div>
+        <KpiCard
+          label="Portfolio Arrears Rate"
+          value="0.0%"
+          icon={CheckCircle2}
+          desc="Zero defaults via automated monthly payroll deduction"
+        />
 
-        <div className="kpi-card">
-          <div className="kpi-header">
-            <span className="kpi-label">ACTIVE BORROWING FILES</span>
-            <div className="kpi-icon-wrap">
-              <FileCheck size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{activeLoansCount}</div>
-          <div className="kpi-desc">Interest benchmark: 7.5% per annum</div>
-        </div>
+        <KpiCard
+          label="Active Borrowing Files"
+          value={activeLoansCount}
+          icon={FileCheck}
+          desc="Interest benchmark: 7.5% per annum"
+        />
       </div>
 
       {/* FILTER & SEARCH TOOLBAR */}
@@ -216,10 +202,10 @@ export const LoanRegisterReportPage: React.FC = () => {
                   </td>
                   <td>{l.department}</td>
                   <td className="align-right num">{formatCurrency(l.requestedAmount)}</td>
-                  <td className="align-right num" style={{ fontWeight: 700, color: l.outstandingPrincipal > 0 ? 'var(--color-burgundy-700)' : 'var(--color-text-muted)' }}>
+                  <td className="align-right num" style={{ fontWeight: 700, color: 'var(--color-navy-900)' }}>
                     {formatCurrency(l.outstandingPrincipal)}
                   </td>
-                  <td style={{ fontSize: '0.8125rem' }}>{l.applicationDate}</td>
+                  <td style={{ fontSize: '0.8125rem' }}>{formatDate(l.applicationDate)}</td>
                   <td className="align-center" style={{ fontWeight: 600 }}>{l.interestRate}%</td>
                   <td>
                     {l.outstandingPrincipal > 0 ? (

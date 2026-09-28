@@ -5,7 +5,6 @@ import {
   ChevronDown,
   ChevronRight,
   Landmark,
-  FileCheck2,
   FileSpreadsheet,
   Shield,
   Settings,
@@ -21,13 +20,14 @@ import {
   Bell,
   HelpCircle,
   CreditCard,
+  TrendingUp,
 } from 'lucide-react';
 import { useApp, NavigationPage } from '../../context/AppContext';
 
 import iucbLogo from '../../assets/iucb-logo.png';
 
 export const Sidebar: React.FC = () => {
-  const { activePage, setActivePage, loans, contributions, currentRole, notifications } = useApp();
+  const { activePage, setActivePage, currentRole, notifications } = useApp();
   const [collapsed, setCollapsed] = useState(false);
   const [membersOpen, setMembersOpen] = useState(true);
   const [fundOpen, setFundOpen] = useState(true);
@@ -40,11 +40,6 @@ export const Sidebar: React.FC = () => {
       setReportsOpen(true);
     }
   }, [isReportsPage]);
-
-  // Compute pending approvals count for badge
-  const pendingLoans = loans.filter((l) => l.status === 'Pending Approval' || l.status === 'Under Committee Review').length;
-  const pendingContributions = contributions.filter((c) => c.entryStatus === 'Pending Approval').length;
-  const totalPendingApprovals = pendingLoans + pendingContributions;
 
   const navigateTo = (page: NavigationPage) => {
     setActivePage(page);
@@ -154,15 +149,6 @@ export const Sidebar: React.FC = () => {
             </button>
 
             <button
-              className={`sidebar-item ${activePage === 'my-advance' ? 'active' : ''}`}
-              onClick={() => navigateTo('my-advance')}
-              title="My 18-Year Advance"
-            >
-              <Award className="item-icon" />
-              {!collapsed && <span className="item-label">My 18-Year Advance</span>}
-            </button>
-
-            <button
               className={`sidebar-item ${activePage === 'my-retirement' ? 'active' : ''}`}
               onClick={() => navigateTo('my-retirement')}
               title="My Retirement"
@@ -229,14 +215,19 @@ export const Sidebar: React.FC = () => {
             {/* Members Module */}
             {!collapsed ? (
               <div>
-                <div
-                  className="sidebar-group-label"
+                <button
+                  className="sidebar-item"
                   onClick={() => setMembersOpen(!membersOpen)}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
+                  title="Members"
                 >
-                  <span>Members</span>
-                  {membersOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                </div>
+                  <Users className="item-icon" />
+                  <span className="item-label">Members</span>
+                  {membersOpen ? (
+                    <ChevronDown size={14} style={{ color: '#8896AB', flexShrink: 0 }} />
+                  ) : (
+                    <ChevronRight size={14} style={{ color: '#8896AB', flexShrink: 0 }} />
+                  )}
+                </button>
                 {membersOpen && (
                   <div className="sidebar-subnav">
                     <button
@@ -252,23 +243,17 @@ export const Sidebar: React.FC = () => {
                       Contributions
                     </button>
                     <button
-                      className={`sidebar-subitem ${activePage === 'ledger' ? 'active' : ''}`}
-                      onClick={() => navigateTo('ledger')}
+                      className={`sidebar-subitem ${activePage === 'withdrawals' ? 'active' : ''}`}
+                      onClick={() => navigateTo('withdrawals')}
                     >
-                      Member Accounts
-                    </button>
-                    <button
-                      className={`sidebar-subitem ${activePage === 'nominees' ? 'active' : ''}`}
-                      onClick={() => navigateTo('nominees')}
-                    >
-                      Nominees
+                      Withdrawals
                     </button>
                   </div>
                 )}
               </div>
             ) : (
               <button
-                className={`sidebar-item ${['members-all', 'contributions', 'ledger', 'nominees'].includes(activePage) ? 'active' : ''}`}
+                className={`sidebar-item ${['members-all', 'contributions', 'withdrawals'].includes(activePage) ? 'active' : ''}`}
                 onClick={() => navigateTo('members-all')}
                 title="Members"
               >
@@ -279,14 +264,19 @@ export const Sidebar: React.FC = () => {
             {/* Fund Management Module */}
             {!collapsed ? (
               <div>
-                <div
-                  className="sidebar-group-label"
+                <button
+                  className="sidebar-item"
                   onClick={() => setFundOpen(!fundOpen)}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
+                  title="Fund Management"
                 >
-                  <span>Fund Management</span>
-                  {fundOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                </div>
+                  <Landmark className="item-icon" />
+                  <span className="item-label">Fund Management</span>
+                  {fundOpen ? (
+                    <ChevronDown size={14} style={{ color: '#8896AB', flexShrink: 0 }} />
+                  ) : (
+                    <ChevronRight size={14} style={{ color: '#8896AB', flexShrink: 0 }} />
+                  )}
+                </button>
                 {fundOpen && (
                   <div className="sidebar-subnav">
                     <button
@@ -302,12 +292,6 @@ export const Sidebar: React.FC = () => {
                       Loans
                     </button>
                     <button
-                      className={`sidebar-subitem ${activePage === 'advances' ? 'active' : ''}`}
-                      onClick={() => navigateTo('advances')}
-                    >
-                      18-Year Advance
-                    </button>
-                    <button
                       className={`sidebar-subitem ${activePage === 'retirement' ? 'active' : ''}`}
                       onClick={() => navigateTo('retirement')}
                     >
@@ -318,7 +302,7 @@ export const Sidebar: React.FC = () => {
               </div>
             ) : (
               <button
-                className={`sidebar-item ${['fund-pool', 'loans', 'advances', 'retirement'].includes(activePage) ? 'active' : ''}`}
+                className={`sidebar-item ${['fund-pool', 'loans', 'retirement'].includes(activePage) ? 'active' : ''}`}
                 onClick={() => navigateTo('fund-pool')}
                 title="Fund Management"
               >
@@ -326,46 +310,52 @@ export const Sidebar: React.FC = () => {
               </button>
             )}
 
-            {/* Central Approvals Queue */}
-            <button
-              className={`sidebar-item ${activePage === 'approvals' ? 'active' : ''}`}
-              onClick={() => navigateTo('approvals')}
-              title="Approvals"
-            >
-              <FileCheck2 className="item-icon" />
-              {!collapsed && (
-                <>
-                  <span className="item-label">Approvals</span>
-                  {totalPendingApprovals > 0 && (
-                    <span className="item-badge">{totalPendingApprovals}</span>
-                  )}
-                </>
-              )}
-            </button>
+            {collapsed && <div className="sidebar-group-divider" />}
+
+            {/* Investments Module */}
+            {!collapsed ? (
+              <div style={{ marginTop: '2px', marginBottom: '2px' }}>
+                <button
+                  className={`sidebar-item ${activePage === 'investments' ? 'active' : ''}`}
+                  onClick={() => navigateTo('investments')}
+                  title="Investments"
+                >
+                  <TrendingUp className="item-icon" />
+                  <span className="item-label">Investments</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                className={`sidebar-item ${activePage === 'investments' ? 'active' : ''}`}
+                onClick={() => navigateTo('investments')}
+                title="Investments"
+              >
+                <TrendingUp className="item-icon" />
+              </button>
+            )}
 
             {collapsed && <div className="sidebar-group-divider" />}
 
             {/* Reports Module */}
             {!collapsed ? (
               <div>
-                <div
-                  className="sidebar-group-label"
+                <button
+                  className="sidebar-item"
                   onClick={() => setReportsOpen(!reportsOpen)}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
+                  title="Reports"
                 >
-                  <span>Reports</span>
-                  {reportsOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                </div>
+                  <FileSpreadsheet className="item-icon" />
+                  <span className="item-label">Reports</span>
+                  {reportsOpen ? (
+                    <ChevronDown size={14} style={{ color: '#8896AB', flexShrink: 0 }} />
+                  ) : (
+                    <ChevronRight size={14} style={{ color: '#8896AB', flexShrink: 0 }} />
+                  )}
+                </button>
                 {reportsOpen && (
                   <div className="sidebar-subnav">
                     <button
-                      className={`sidebar-subitem ${activePage === 'reports' ? 'active' : ''}`}
-                      onClick={() => navigateTo('reports')}
-                    >
-                      Overview & Exports
-                    </button>
-                    <button
-                      className={`sidebar-subitem ${activePage === 'reports-fund-pool' ? 'active' : ''}`}
+                      className={`sidebar-subitem ${activePage === 'reports-fund-pool' || activePage === 'reports' ? 'active' : ''}`}
                       onClick={() => navigateTo('reports-fund-pool')}
                     >
                       Fund Pool Overview
@@ -383,16 +373,16 @@ export const Sidebar: React.FC = () => {
                       Loan Register
                     </button>
                     <button
-                      className={`sidebar-subitem ${activePage === 'reports-18-year-advance' ? 'active' : ''}`}
-                      onClick={() => navigateTo('reports-18-year-advance')}
-                    >
-                      18-Yr Advance Tracker
-                    </button>
-                    <button
                       className={`sidebar-subitem ${activePage === 'reports-retirement-pipeline' ? 'active' : ''}`}
                       onClick={() => navigateTo('reports-retirement-pipeline')}
                     >
                       Retirement Pipeline
+                    </button>
+                    <button
+                      className={`sidebar-subitem ${activePage === 'reports-trust-fund-journal' ? 'active' : ''}`}
+                      onClick={() => navigateTo('reports-trust-fund-journal')}
+                    >
+                      Trust Fund Activity Journal
                     </button>
                     <button
                       className={`sidebar-subitem ${activePage === 'reports-audit-trail' || activePage === 'audit-trail' ? 'active' : ''}`}
@@ -400,13 +390,49 @@ export const Sidebar: React.FC = () => {
                     >
                       Audit Trail
                     </button>
+                    <button
+                      className={`sidebar-subitem ${activePage === 'reports-balance-sheet' ? 'active' : ''}`}
+                      onClick={() => navigateTo('reports-balance-sheet')}
+                    >
+                      Balance Sheet
+                    </button>
+                    <button
+                      className={`sidebar-subitem ${activePage === 'reports-charge-analysis' ? 'active' : ''}`}
+                      onClick={() => navigateTo('reports-charge-analysis')}
+                    >
+                      Charge Analysis
+                    </button>
+                    <button
+                      className={`sidebar-subitem ${activePage === 'reports-profit-loss' ? 'active' : ''}`}
+                      onClick={() => navigateTo('reports-profit-loss')}
+                    >
+                      Profit &amp; Loss Statement
+                    </button>
+                    <button
+                      className={`sidebar-subitem ${activePage === 'reports-loan-report' ? 'active' : ''}`}
+                      onClick={() => navigateTo('reports-loan-report')}
+                    >
+                      Loan Report
+                    </button>
+                    <button
+                      className={`sidebar-subitem ${activePage === 'reports-account-statement' ? 'active' : ''}`}
+                      onClick={() => navigateTo('reports-account-statement')}
+                    >
+                      Account Statement
+                    </button>
+                    <button
+                      className={`sidebar-subitem ${activePage === 'reports-transfer-scroll' ? 'active' : ''}`}
+                      onClick={() => navigateTo('reports-transfer-scroll')}
+                    >
+                      Transfer Scroll
+                    </button>
                   </div>
                 )}
               </div>
             ) : (
               <button
                 className={`sidebar-item ${activePage === 'reports' || activePage.startsWith('reports-') || activePage === 'audit-trail' ? 'active' : ''}`}
-                onClick={() => navigateTo('reports')}
+                onClick={() => navigateTo('reports-fund-pool')}
                 title="Reports"
               >
                 <FileSpreadsheet className="item-icon" />
@@ -415,42 +441,49 @@ export const Sidebar: React.FC = () => {
 
             {collapsed && <div className="sidebar-group-divider" />}
 
-            {/* Administration */}
-            {!collapsed ? (
-              <div>
-                <div
-                  className="sidebar-group-label"
-                  onClick={() => setAdminOpen(!adminOpen)}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
-                >
-                  <span>Administration</span>
-                  {adminOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+            {/* Administration (Admin only) */}
+            {currentRole === 'Admin' && (
+              !collapsed ? (
+                <div>
+                  <button
+                    className="sidebar-item"
+                    onClick={() => setAdminOpen(!adminOpen)}
+                    title="Administration"
+                  >
+                    <Settings className="item-icon" />
+                    <span className="item-label">Administration</span>
+                    {adminOpen ? (
+                      <ChevronDown size={14} style={{ color: '#8896AB', flexShrink: 0 }} />
+                    ) : (
+                      <ChevronRight size={14} style={{ color: '#8896AB', flexShrink: 0 }} />
+                    )}
+                  </button>
+                  {adminOpen && (
+                    <div className="sidebar-subnav">
+                      <button
+                        className={`sidebar-subitem ${activePage === 'users-roles' ? 'active' : ''}`}
+                        onClick={() => navigateTo('users-roles')}
+                      >
+                        Users & Roles
+                      </button>
+                      <button
+                        className={`sidebar-subitem ${activePage === 'system-settings' ? 'active' : ''}`}
+                        onClick={() => navigateTo('system-settings')}
+                      >
+                        System Settings
+                      </button>
+                    </div>
+                  )}
                 </div>
-                {adminOpen && (
-                  <div className="sidebar-subnav">
-                    <button
-                      className={`sidebar-subitem ${activePage === 'users-roles' ? 'active' : ''}`}
-                      onClick={() => navigateTo('users-roles')}
-                    >
-                      Users & Roles
-                    </button>
-                    <button
-                      className={`sidebar-subitem ${activePage === 'system-settings' ? 'active' : ''}`}
-                      onClick={() => navigateTo('system-settings')}
-                    >
-                      System Settings
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <button
-                className={`sidebar-item ${['users-roles', 'system-settings'].includes(activePage) ? 'active' : ''}`}
-                onClick={() => navigateTo('users-roles')}
-                title="Administration"
-              >
-                <Settings className="item-icon" />
-              </button>
+              ) : (
+                <button
+                  className={`sidebar-item ${['users-roles', 'system-settings'].includes(activePage) ? 'active' : ''}`}
+                  onClick={() => navigateTo('users-roles')}
+                  title="Administration"
+                >
+                  <Settings className="item-icon" />
+                </button>
+              )
             )}
           </>
         )}

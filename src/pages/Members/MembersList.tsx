@@ -4,18 +4,17 @@ import {
   Plus,
   Filter,
   Download,
-  MoreVertical,
-  User,
   Eye,
-  BookOpen,
   CreditCard,
   Edit,
-  History,
   Check,
+  FileText,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { ActionMenu } from '../../components/common/ActionMenu';
 import { AddMemberModal } from './AddMemberModal';
+import { formatDate } from '../../utils/dateFormat';
 
 export const MembersList: React.FC = () => {
   const {
@@ -35,9 +34,6 @@ export const MembersList: React.FC = () => {
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 12;
-
-  // Active 3-dot dropdown menu
-  const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
   // Filter logic
   const filteredMembers = members.filter((m) => {
@@ -88,13 +84,15 @@ export const MembersList: React.FC = () => {
             <Download size={14} />
             <span>Export CSV</span>
           </button>
-          <button
-            className="btn btn-primary btn-sm"
-            onClick={() => setIsAddModalOpen(true)}
-          >
-            <Plus size={14} />
-            <span>Add Member</span>
-          </button>
+          {currentRole !== 'Trust Committee' && (
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => setIsAddModalOpen(true)}
+            >
+              <Plus size={14} />
+              <span>Add Member</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -177,7 +175,6 @@ export const MembersList: React.FC = () => {
               <th>Date of Joining</th>
               <th className="align-right">Basic Salary</th>
               <th className="align-center">Contrib %</th>
-              <th className="align-right">Current PF Balance</th>
               <th>Loan Status</th>
               <th>Account Status</th>
               <th className="align-right">Actions</th>
@@ -186,7 +183,7 @@ export const MembersList: React.FC = () => {
           <tbody>
             {paginatedMembers.length === 0 ? (
               <tr>
-                <td colSpan={10} style={{ textAlign: 'center', padding: '36px', color: 'var(--color-text-muted)' }}>
+                <td colSpan={9} style={{ textAlign: 'center', padding: '36px', color: 'var(--color-text-muted)' }}>
                   No members matched your search and filter criteria.
                 </td>
               </tr>
@@ -224,15 +221,12 @@ export const MembersList: React.FC = () => {
                     </div>
                   </td>
                   <td>{member.department}</td>
-                  <td>{member.dateOfJoining}</td>
+                  <td>{formatDate(member.dateOfJoining)}</td>
                   <td className="align-right num" style={{ fontWeight: 500 }}>
                     {formatCurrency(member.salary)}
                   </td>
                   <td className="align-center">
                     <span className="badge badge-neutral">{member.contributionPercentage}%</span>
-                  </td>
-                  <td className="align-right num" style={{ fontWeight: 700, color: 'var(--color-navy-900)' }}>
-                    {formatCurrency(member.currentBalance)}
                   </td>
                   <td>
                     {member.hasLoan ? (
@@ -247,147 +241,28 @@ export const MembersList: React.FC = () => {
                   <td>
                     <StatusBadge status={member.accountStatus} size="sm" />
                   </td>
-                  <td className="align-right" style={{ position: 'relative' }}>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '4px' }}>
-                      <button
-                        className="btn btn-secondary btn-sm"
-                        onClick={() => {
+                  <td className="align-right">
+                    <ActionMenu
+                      primaryAction={{
+                        label: 'View Profile',
+                        icon: Eye,
+                        onClick: () => {
                           setSelectedMemberId(member.id);
                           setActivePage('member-profile');
-                        }}
-                        title="View Profile"
-                      >
-                        <Eye size={13} />
-                        <span>Profile</span>
-                      </button>
-                      <button
-                        className="btn-close"
-                        style={{ border: '1px solid var(--color-border-subtle)', padding: '4px' }}
-                        onClick={() => setActiveMenuId(activeMenuId === member.id ? null : member.id)}
-                        title="Actions"
-                      >
-                        <MoreVertical size={14} />
-                      </button>
-                    </div>
-
-                    {/* 3-Dot Action Dropdown Menu */}
-                    {activeMenuId === member.id && (
-                      <div
-                        style={{
-                          position: 'absolute',
-                          right: '14px',
-                          top: '100%',
-                          zIndex: 30,
-                          background: '#FFFFFF',
-                          borderRadius: '6px',
-                          boxShadow: 'var(--shadow-lg)',
-                          border: '1px solid var(--color-border-subtle)',
-                          padding: '4px',
-                          minWidth: '160px',
-                          textAlign: 'left',
-                        }}
-                      >
-                        <button
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            width: '100%',
-                            padding: '6px 10px',
-                            background: 'transparent',
-                            border: 'none',
-                            fontSize: '0.75rem',
-                            cursor: 'pointer',
-                            borderRadius: '4px',
-                          }}
-                          onClick={() => {
-                            setSelectedMemberId(member.id);
-                            setActivePage('member-profile');
-                            setActiveMenuId(null);
-                          }}
-                          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#F8FAFC')}
-                          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                        >
-                          <User size={13} />
-                          <span>View Profile</span>
-                        </button>
-
-                        <button
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            width: '100%',
-                            padding: '6px 10px',
-                            background: 'transparent',
-                            border: 'none',
-                            fontSize: '0.75rem',
-                            cursor: 'pointer',
-                            borderRadius: '4px',
-                          }}
-                          onClick={() => {
+                        },
+                        title: 'View Profile',
+                      }}
+                      secondaryActions={[
+                        {
+                          label: 'View Ledger',
+                          icon: FileText,
+                          onClick: () => {
                             setSelectedMemberId(member.id);
                             setActivePage('ledger');
-                            setActiveMenuId(null);
-                          }}
-                          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#F8FAFC')}
-                          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                        >
-                          <BookOpen size={13} />
-                          <span>View Account Ledger</span>
-                        </button>
-
-                        <button
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            width: '100%',
-                            padding: '6px 10px',
-                            background: 'transparent',
-                            border: 'none',
-                            fontSize: '0.75rem',
-                            cursor: 'pointer',
-                            borderRadius: '4px',
-                          }}
-                          onClick={() => {
-                            setSelectedMemberId(member.id);
-                            setActivePage('contributions');
-                            setActiveMenuId(null);
-                          }}
-                          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#F8FAFC')}
-                          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                        >
-                          <History size={13} />
-                          <span>View Contributions</span>
-                        </button>
-
-                        <button
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            width: '100%',
-                            padding: '6px 10px',
-                            background: 'transparent',
-                            border: 'none',
-                            fontSize: '0.75rem',
-                            cursor: 'pointer',
-                            borderRadius: '4px',
-                          }}
-                          onClick={() => {
-                            setSelectedMemberId(member.id);
-                            setActivePage('loans');
-                            setActiveMenuId(null);
-                          }}
-                          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#F8FAFC')}
-                          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                        >
-                          <CreditCard size={13} />
-                          <span>View Loans</span>
-                        </button>
-                      </div>
-                    )}
+                          },
+                        },
+                      ]}
+                    />
                   </td>
                 </tr>
               ))

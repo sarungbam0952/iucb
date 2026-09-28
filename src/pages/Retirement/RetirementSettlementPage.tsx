@@ -4,20 +4,23 @@ import {
   Clock,
   CheckCircle2,
   FileCheck,
-  Check,
   Eye,
   X,
   ShieldCheck,
   Building2,
   Calculator,
   ArrowRight,
+  UserCheck,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { KpiCard } from '../../components/common/KpiCard';
+import { ActionMenu } from '../../components/common/ActionMenu';
 import { RetirementSettlement } from '../../types';
+import { formatDate } from '../../utils/dateFormat';
 
 export const RetirementSettlementPage: React.FC = () => {
-  const { retirements, formatCurrency, approveRetirementSettlement, currentRole, setSelectedMemberId, setActivePage } = useApp();
+  const { retirements, formatCurrency, currentRole, setSelectedMemberId, setActivePage } = useApp();
 
   const [activeModalRetirement, setActiveModalRetirement] = useState<RetirementSettlement | null>(null);
 
@@ -43,49 +46,33 @@ export const RetirementSettlementPage: React.FC = () => {
 
       {/* 4 SUMMARY METRICS */}
       <div className="kpi-grid">
-        <div className="kpi-card">
-          <div className="kpi-header">
-            <span className="kpi-label">UPCOMING RETIREMENTS</span>
-            <div className="kpi-icon-wrap">
-              <Calendar size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{upcomingCount}</div>
-          <div className="kpi-desc">Scheduled within next 36 months</div>
-        </div>
+        <KpiCard
+          label="Upcoming Retirements"
+          value={upcomingCount}
+          icon={Calendar}
+          desc="Scheduled within next 36 months"
+        />
 
-        <div className="kpi-card accent-amber">
-          <div className="kpi-header">
-            <span className="kpi-label">PENDING SETTLEMENTS</span>
-            <div className="kpi-icon-wrap" style={{ background: '#FFFBEB', color: '#D97706' }}>
-              <Clock size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{pendingCount}</div>
-          <div className="kpi-desc">Awaiting committee certification</div>
-        </div>
+        <KpiCard
+          label="Pending Settlements"
+          value={pendingCount}
+          icon={Clock}
+          desc="Awaiting committee certification"
+        />
 
-        <div className="kpi-card accent-emerald">
-          <div className="kpi-header">
-            <span className="kpi-label">COMPLETED SETTLEMENTS</span>
-            <div className="kpi-icon-wrap" style={{ background: '#ECFDF5', color: '#059669' }}>
-              <CheckCircle2 size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{completedCount}</div>
-          <div className="kpi-desc">Approved and finalized records</div>
-        </div>
+        <KpiCard
+          label="Completed Settlements"
+          value={completedCount}
+          icon={CheckCircle2}
+          desc="Approved and finalized records"
+        />
 
-        <div className="kpi-card accent-burgundy">
-          <div className="kpi-header">
-            <span className="kpi-label">TOTAL ESTIMATED SETTLEMENT</span>
-            <div className="kpi-icon-wrap" style={{ background: 'var(--color-burgundy-50)', color: 'var(--color-burgundy-700)' }}>
-              <Building2 size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(totalSettlementVal)}</div>
-          <div className="kpi-desc">Total projected payout pipeline</div>
-        </div>
+        <KpiCard
+          label="Total Estimated Settlement"
+          value={formatCurrency(totalSettlementVal)}
+          icon={Building2}
+          desc="Total projected payout pipeline"
+        />
       </div>
 
       {/* OPEN BUSINESS QUESTION ALERT */}
@@ -128,7 +115,7 @@ export const RetirementSettlementPage: React.FC = () => {
                 <td style={{ fontWeight: 600 }}>{ret.memberName}</td>
                 <td>
                   <span
-                    style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--color-burgundy-700)', cursor: 'pointer' }}
+                    style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-navy-900)', cursor: 'pointer' }}
                     onClick={() => {
                       setSelectedMemberId(ret.memberId);
                       setActivePage('member-profile');
@@ -138,9 +125,9 @@ export const RetirementSettlementPage: React.FC = () => {
                   </span>
                 </td>
                 <td>{ret.department}</td>
-                <td style={{ fontWeight: 600 }}>{ret.retirementDate}</td>
+                <td style={{ fontWeight: 600 }}>{formatDate(ret.retirementDate)}</td>
                 <td className="align-right num">{formatCurrency(ret.totalContribution)}</td>
-                <td className="align-right num" style={{ color: 'var(--color-burgundy-700)' }}>
+                <td className="align-right num" style={{ fontWeight: 600, color: 'var(--color-navy-900)' }}>
                   {formatCurrency(ret.accruedInterest)}
                 </td>
                 <td className="align-right num" style={{ fontWeight: 700, color: 'var(--color-navy-900)' }}>
@@ -150,28 +137,24 @@ export const RetirementSettlementPage: React.FC = () => {
                   <StatusBadge status={ret.status} size="sm" />
                 </td>
                 <td className="align-right">
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '4px' }}>
-                    {/* Admin Approve Settlement */}
-                    {currentRole === 'Admin' && ret.status !== 'Approved' && ret.status !== 'Settled' && (
-                      <button
-                        className="btn btn-success btn-sm"
-                        onClick={() => approveRetirementSettlement(ret.id)}
-                        title="Approve Settlement Record"
-                      >
-                        <Check size={13} />
-                        <span>Approve</span>
-                      </button>
-                    )}
-
-                    <button
-                      className="btn btn-secondary btn-sm"
-                      onClick={() => setActiveModalRetirement(ret)}
-                      title="Calculation Breakdown"
-                    >
-                      <Eye size={13} />
-                      <span>Breakdown</span>
-                    </button>
-                  </div>
+                  <ActionMenu
+                    primaryAction={{
+                      label: 'Breakdown',
+                      icon: Eye,
+                      onClick: () => setActiveModalRetirement(ret),
+                      title: 'Calculation Breakdown',
+                    }}
+                    secondaryActions={[
+                      {
+                        label: 'Member Profile',
+                        icon: UserCheck,
+                        onClick: () => {
+                          setSelectedMemberId(ret.memberId);
+                          setActivePage('member-profile');
+                        },
+                      },
+                    ]}
+                  />
                 </td>
               </tr>
             ))}
@@ -193,7 +176,7 @@ export const RetirementSettlementPage: React.FC = () => {
               <div style={{ background: '#F8FAFC', padding: '12px 14px', borderRadius: '6px', border: '1px solid var(--color-border-subtle)' }}>
                 <div><strong>Employee:</strong> {activeModalRetirement.memberName} ({activeModalRetirement.employeeId})</div>
                 <div><strong>Department:</strong> {activeModalRetirement.department}</div>
-                <div><strong>Effective Superannuation Date:</strong> {activeModalRetirement.retirementDate}</div>
+                <div><strong>Effective Superannuation Date:</strong> {formatDate(activeModalRetirement.retirementDate)}</div>
                 <div><strong>Status:</strong> <StatusBadge status={activeModalRetirement.status} size="sm" /></div>
               </div>
 
@@ -228,18 +211,6 @@ export const RetirementSettlementPage: React.FC = () => {
               <button className="btn btn-secondary" onClick={() => setActiveModalRetirement(null)}>
                 Close
               </button>
-              {currentRole === 'Admin' && activeModalRetirement.status !== 'Approved' && (
-                <button
-                  className="btn btn-primary"
-                  onClick={() => {
-                    approveRetirementSettlement(activeModalRetirement.id);
-                    setActiveModalRetirement(null);
-                  }}
-                >
-                  <Check size={14} />
-                  <span>Approve Settlement</span>
-                </button>
-              )}
             </div>
           </div>
         </div>

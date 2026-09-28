@@ -16,6 +16,7 @@ import {
 import { useApp } from '../../context/AppContext';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { AuditLog } from '../../types';
+import { formatDateTime } from '../../utils/dateFormat';
 
 export const AuditTrailPage: React.FC = () => {
   const { auditLogs } = useApp();
@@ -106,7 +107,7 @@ export const AuditTrailPage: React.FC = () => {
         <div className="kpi-card accent-emerald">
           <div className="kpi-header">
             <span className="kpi-label">FINANCIAL RECORDS STAMPED</span>
-            <div className="kpi-icon-wrap" style={{ background: '#ECFDF5', color: '#059669' }}>
+            <div className="kpi-icon-wrap">
               <ShieldCheck size={18} />
             </div>
           </div>
@@ -197,7 +198,7 @@ export const AuditTrailPage: React.FC = () => {
             ) : (
               filteredLogs.map((log) => (
                 <tr key={log.id}>
-                  <td style={{ fontSize: '0.75rem', whiteSpace: 'nowrap' }}>{log.timestamp}</td>
+                  <td style={{ fontSize: '0.75rem', whiteSpace: 'nowrap' }}>{formatDateTime(log.timestamp)}</td>
                   <td style={{ fontWeight: 600 }}>{log.user}</td>
                   <td>
                     <span className="badge badge-neutral">{log.role}</span>
@@ -249,7 +250,7 @@ export const AuditTrailPage: React.FC = () => {
             </div>
             <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '0.8125rem' }}>
               <div style={{ background: '#F8FAFC', padding: '12px', borderRadius: '6px', border: '1px solid var(--color-border-subtle)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                <div><span style={{ color: 'var(--color-text-muted)' }}>Timestamp:</span> <strong>{inspectLog.timestamp}</strong></div>
+                <div><span style={{ color: 'var(--color-text-muted)' }}>Timestamp:</span> <strong>{formatDateTime(inspectLog.timestamp)}</strong></div>
                 <div><span style={{ color: 'var(--color-text-muted)' }}>Operator:</span> <strong>{inspectLog.user}</strong></div>
                 <div><span style={{ color: 'var(--color-text-muted)' }}>Role:</span> <span className="badge badge-neutral">{inspectLog.role}</span></div>
                 <div><span style={{ color: 'var(--color-text-muted)' }}>Action:</span> <StatusBadge status={inspectLog.action} size="sm" /></div>

@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { KpiCard } from '../../components/common/KpiCard';
+import { formatDate } from '../../utils/dateFormat';
 
 export const RetirementPipelineReportPage: React.FC = () => {
   const {
@@ -90,49 +92,33 @@ export const RetirementPipelineReportPage: React.FC = () => {
 
       {/* 4 SUMMARY METRIC CARDS */}
       <div className="kpi-grid">
-        <div className="kpi-card accent-navy">
-          <div className="kpi-header">
-            <span className="kpi-label">UPCOMING SUPERANNUATIONS</span>
-            <div className="kpi-icon-wrap" style={{ background: '#EFF6FF', color: 'var(--color-navy-900)' }}>
-              <Calendar size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{totalRetiringCount}</div>
-          <div className="kpi-desc">Scheduled retirees in 24-month horizon</div>
-        </div>
+        <KpiCard
+          label="Upcoming Superannuations"
+          value={totalRetiringCount}
+          icon={Calendar}
+          desc="Scheduled retirees in 24-month horizon"
+        />
 
-        <div className="kpi-card accent-emerald">
-          <div className="kpi-header">
-            <span className="kpi-label">CONTRIBUTED CORPUS (PRINCIPAL)</span>
-            <div className="kpi-icon-wrap" style={{ background: '#ECFDF5', color: '#059669' }}>
-              <PiggyBank size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(totalPrincipal)}</div>
-          <div className="kpi-desc">Historical employee PF contributions</div>
-        </div>
+        <KpiCard
+          label="Contributed Corpus (Principal)"
+          value={formatCurrency(totalPrincipal)}
+          icon={PiggyBank}
+          desc="Historical employee PF contributions"
+        />
 
-        <div className="kpi-card accent-burgundy">
-          <div className="kpi-header">
-            <span className="kpi-label">ACCRUED COMPOUND INTEREST</span>
-            <div className="kpi-icon-wrap" style={{ background: 'var(--color-burgundy-50)', color: 'var(--color-burgundy-700)' }}>
-              <TrendingUp size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(totalInterest)}</div>
-          <div className="kpi-desc">Trust investment yield credit</div>
-        </div>
+        <KpiCard
+          label="Accrued Compound Interest"
+          value={formatCurrency(totalInterest)}
+          icon={TrendingUp}
+          desc="Trust investment yield credit"
+        />
 
-        <div className="kpi-card accent-amber">
-          <div className="kpi-header">
-            <span className="kpi-label">PROJECTED SETTLEMENT OUTFLOW</span>
-            <div className="kpi-icon-wrap" style={{ background: '#FFFBEB', color: '#D97706' }}>
-              <Banknote size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(totalOutflow)}</div>
-          <div className="kpi-desc">Total final payout commitment</div>
-        </div>
+        <KpiCard
+          label="Projected Settlement Outflow"
+          value={formatCurrency(totalOutflow)}
+          icon={Banknote}
+          desc="Total final payout commitment"
+        />
       </div>
 
       {/* FILTER & SEARCH TOOLBAR */}
@@ -212,9 +198,9 @@ export const RetirementPipelineReportPage: React.FC = () => {
                   </td>
                   <td style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{r.employeeId}</td>
                   <td>{r.department}</td>
-                  <td style={{ fontSize: '0.8125rem', fontWeight: 600 }}>{r.retirementDate}</td>
+                  <td style={{ fontSize: '0.8125rem', fontWeight: 600 }}>{formatDate(r.retirementDate)}</td>
                   <td className="align-right num">{formatCurrency(r.totalContribution)}</td>
-                  <td className="align-right num" style={{ color: 'var(--color-burgundy-700)' }}>
+                  <td className="align-right num" style={{ fontWeight: 600, color: 'var(--color-navy-900)' }}>
                     {formatCurrency(r.accruedInterest)}
                   </td>
                   <td className="align-right num" style={{ fontWeight: 700, color: 'var(--color-navy-900)' }}>

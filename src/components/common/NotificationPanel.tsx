@@ -1,6 +1,7 @@
 import React from 'react';
 import { Bell, Check, X, ArrowRight, ShieldCheck, FileCheck, Users, Info } from 'lucide-react';
 import { useApp, NavigationPage } from '../../context/AppContext';
+import { formatDateTime } from '../../utils/dateFormat';
 
 interface NotificationPanelProps {
   isOpen: boolean;
@@ -20,7 +21,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, on
       if (linkTarget === 'loans') setActivePage('loans');
       else if (linkTarget === 'contributions') setActivePage('contributions');
       else if (linkTarget === 'retirement') setActivePage('retirement');
-      else if (linkTarget === 'advances') setActivePage('advances');
+      else if (linkTarget === 'advances') setActivePage('fund-pool');
       else setActivePage('dashboard');
     }
     onClose();
@@ -148,7 +149,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({ isOpen, on
                         {n.description}
                       </p>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.6875rem', color: 'var(--color-text-muted)' }}>
-                        <span>{n.timestamp}</span>
+                        <span>{formatDateTime(n.timestamp)}</span>
                         <span style={{ display: 'flex', alignItems: 'center', gap: '3px', color: 'var(--color-navy-700)', fontWeight: 600 }}>
                           View Record <ArrowRight size={11} />
                         </span>

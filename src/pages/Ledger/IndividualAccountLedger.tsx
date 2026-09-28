@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { TransactionType } from '../../types';
+import { formatDate } from '../../utils/dateFormat';
 
 export const IndividualAccountLedger: React.FC = () => {
   const {
@@ -106,7 +107,7 @@ export const IndividualAccountLedger: React.FC = () => {
                 </span>
               </div>
               <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                {member.designation} • {member.department} • Joined {member.dateOfJoining}
+                {member.designation} • {member.department} • Joined {formatDate(member.dateOfJoining)}
               </div>
             </div>
           </div>
@@ -214,7 +215,7 @@ export const IndividualAccountLedger: React.FC = () => {
             ) : (
               filteredEntries.map((txn) => (
                 <tr key={txn.id}>
-                  <td style={{ fontWeight: 500 }}>{txn.date}</td>
+                  <td style={{ fontWeight: 500 }}>{formatDate(txn.date)}</td>
                   <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-navy-900)' }}>
                     {txn.id}
                   </td>
@@ -303,9 +304,9 @@ export const IndividualAccountLedger: React.FC = () => {
                   <div><span style={{ color: '#64748B' }}>Designation:</span> <strong>{member.designation}</strong></div>
                 </div>
                 <div>
-                  <div><span style={{ color: '#64748B' }}>Date of Joining:</span> <strong>{member.dateOfJoining}</strong></div>
+                  <div><span style={{ color: '#64748B' }}>Date of Joining:</span> <strong>{formatDate(member.dateOfJoining)}</strong></div>
                   <div><span style={{ color: '#64748B' }}>Contribution Rate:</span> <strong>{member.contributionPercentage}% of Basic Salary</strong></div>
-                  <div><span style={{ color: '#64748B' }}>Statement Date:</span> <strong>22 September 2026</strong></div>
+                  <div><span style={{ color: '#64748B' }}>Statement Date:</span> <strong>22/09/2026</strong></div>
                   <div><span style={{ color: '#64748B' }}>Account Status:</span> <strong>{member.accountStatus}</strong></div>
                 </div>
               </div>
@@ -322,7 +323,7 @@ export const IndividualAccountLedger: React.FC = () => {
                 </div>
                 <div style={{ border: '1px solid #CBD5E1', padding: '10px', borderRadius: '4px' }}>
                   <div style={{ fontSize: '0.6875rem', color: '#64748B', textTransform: 'uppercase' }}>Outstanding Loan Liability</div>
-                  <div style={{ fontSize: '1rem', fontWeight: 700, color: '#DC2626' }}>{formatCurrency(member.outstandingLoan)}</div>
+                  <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-navy-900)' }}>{formatCurrency(member.outstandingLoan)}</div>
                 </div>
                 <div style={{ border: '2px solid #0A192F', padding: '10px', borderRadius: '4px', background: '#F1F5F9' }}>
                   <div style={{ fontSize: '0.6875rem', color: '#0A192F', fontWeight: 700, textTransform: 'uppercase' }}>Closing Net PF Balance</div>
@@ -345,13 +346,13 @@ export const IndividualAccountLedger: React.FC = () => {
                 <tbody>
                   {memberEntries.map((e) => (
                     <tr key={e.id} style={{ borderBottom: '1px solid #E2E8F0' }}>
-                      <td style={{ padding: '8px' }}>{e.date}</td>
+                      <td style={{ padding: '8px' }}>{formatDate(e.date)}</td>
                       <td style={{ padding: '8px', fontFamily: 'monospace' }}>{e.id}</td>
                       <td style={{ padding: '8px' }}>{e.description}</td>
-                      <td style={{ padding: '8px', textAlign: 'right', fontWeight: 600, color: '#059669' }}>
+                      <td style={{ padding: '8px', textAlign: 'right', fontWeight: 600, color: '#334155' }}>
                         {e.credit > 0 ? formatCurrency(e.credit) : '—'}
                       </td>
-                      <td style={{ padding: '8px', textAlign: 'right', fontWeight: 600, color: '#DC2626' }}>
+                      <td style={{ padding: '8px', textAlign: 'right', fontWeight: 600, color: '#334155' }}>
                         {e.debit > 0 ? formatCurrency(e.debit) : '—'}
                       </td>
                       <td style={{ padding: '8px', textAlign: 'right', fontWeight: 700 }}>

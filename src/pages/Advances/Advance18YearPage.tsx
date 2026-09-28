@@ -15,6 +15,7 @@ import {
 import { useApp } from '../../context/AppContext';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { ServiceAdvance18 } from '../../types';
+import { formatDate } from '../../utils/dateFormat';
 
 export const Advance18YearPage: React.FC = () => {
   const { advances, formatCurrency, grant18YearAdvance, currentRole, setSelectedMemberId, setActivePage } = useApp();
@@ -59,7 +60,7 @@ export const Advance18YearPage: React.FC = () => {
         <div className="kpi-card accent-emerald">
           <div className="kpi-header">
             <span className="kpi-label">ELIGIBLE MEMBERS</span>
-            <div className="kpi-icon-wrap" style={{ background: '#ECFDF5', color: '#059669' }}>
+            <div className="kpi-icon-wrap">
               <Award size={18} />
             </div>
           </div>
@@ -70,7 +71,7 @@ export const Advance18YearPage: React.FC = () => {
         <div className="kpi-card accent-amber">
           <div className="kpi-header">
             <span className="kpi-label">APPROACHING ELIGIBILITY</span>
-            <div className="kpi-icon-wrap" style={{ background: '#FFFBEB', color: '#D97706' }}>
+            <div className="kpi-icon-wrap">
               <Clock size={18} />
             </div>
           </div>
@@ -151,11 +152,11 @@ export const Advance18YearPage: React.FC = () => {
                   </span>
                 </td>
                 <td>{adv.department}</td>
-                <td>{adv.joiningDate}</td>
+                <td>{formatDate(adv.joiningDate)}</td>
                 <td>
                   <span style={{ fontWeight: 700, color: 'var(--color-navy-900)' }}>{adv.yearsOfService}</span> Years
                 </td>
-                <td>{adv.eligibilityDate}</td>
+                <td>{formatDate(adv.eligibilityDate)}</td>
                 <td>
                   <StatusBadge status={adv.advanceStatus} size="sm" />
                 </td>
@@ -218,7 +219,7 @@ export const Advance18YearPage: React.FC = () => {
                   </div>
                   <div>
                     <span style={{ color: 'var(--color-text-muted)', display: 'block' }}>Date of Joining</span>
-                    <strong>{selectedAdvance.joiningDate}</strong>
+                    <strong>{formatDate(selectedAdvance.joiningDate)}</strong>
                   </div>
                   <div>
                     <span style={{ color: 'var(--color-text-muted)', display: 'block' }}>Total Service Completed</span>
@@ -226,7 +227,7 @@ export const Advance18YearPage: React.FC = () => {
                   </div>
                   <div>
                     <span style={{ color: 'var(--color-text-muted)', display: 'block' }}>Eligibility Date</span>
-                    <strong>{selectedAdvance.eligibilityDate}</strong>
+                    <strong>{formatDate(selectedAdvance.eligibilityDate)}</strong>
                   </div>
                   <div>
                     <span style={{ color: 'var(--color-text-muted)', display: 'block' }}>Current Status</span>
@@ -239,7 +240,7 @@ export const Advance18YearPage: React.FC = () => {
                 <div style={{ background: '#ECFDF5', border: '1px solid #A7F3D0', padding: '12px', borderRadius: '6px', color: '#065F46' }}>
                   <div style={{ fontWeight: 700, marginBottom: '4px' }}>Granted Benefit Details</div>
                   <div>Amount Granted: <strong>{formatCurrency(selectedAdvance.grantedAmount || 0)}</strong></div>
-                  <div>Sanction Date: <strong>{selectedAdvance.grantedDate}</strong></div>
+                  <div>Sanction Date: <strong>{formatDate(selectedAdvance.grantedDate)}</strong></div>
                   <div>Sanction Order No: <strong>{selectedAdvance.sanctionOrderNo}</strong></div>
                 </div>
               ) : (

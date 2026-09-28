@@ -52,7 +52,8 @@ export interface ContributionRecord {
   salary: number;
   contributionPercentage: number;
   contributionAmount: number;
-  entryStatus: 'Draft' | 'Pending Approval' | 'Approved' | 'Rejected';
+  entryStatus: 'Draft' | 'Pending Approval' | 'Approved' | 'Rejected' | 'Cancelled';
+  entryType?: 'Manual Entry' | 'Imported';
   enteredBy: string;
   enteredDate: string;
   approvedBy?: string;
@@ -66,7 +67,23 @@ export type TransactionType =
   | 'Loan Disbursement'
   | 'Loan Repayment'
   | '18-Year Advance'
-  | 'Retirement Settlement';
+  | 'Retirement Settlement'
+  | 'Withdrawal';
+
+export interface WithdrawalRecord {
+  id: string; // e.g. "WD-2026-0042"
+  date: string;
+  memberId: string;
+  memberName: string;
+  department: Department;
+  withdrawalType: string;
+  amount: number;
+  referenceNo: string;
+  status: 'Approved' | 'Pending Approval' | 'Under Review' | 'Draft' | 'Rejected';
+  remarks?: string;
+  enteredBy: string;
+  enteredDate: string;
+}
 
 export interface AccountLedgerEntry {
   id: string; // e.g. "TXN-2026-00482"
@@ -110,7 +127,9 @@ export interface LoanRecord {
   approvedAmount?: number;
   interestRate: number; // e.g. 6.5
   tenureMonths: number;
+  monthlyEmi?: number;
   applicationDate: string;
+  sanctionDate?: string;
   purpose: string;
   status:
     | 'Draft'
@@ -176,11 +195,23 @@ export interface AuditLog {
     | '18-Year Advance'
     | 'Retirement'
     | 'Ledger'
-    | 'Administration';
+    | 'Administration'
+    | 'Investments';
   recordId: string;
   previousValue: string;
   newValue: string;
   details?: string;
+}
+
+export interface InvestmentRecord {
+  id: string; // e.g. "INV-2026-0001"
+  date: string; // YYYY-MM-DD
+  bankName: string;
+  amount: number;
+  type: 'Credit' | 'Debit';
+  remarks?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface SystemUser {

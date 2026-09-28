@@ -34,6 +34,89 @@ html, body {
 }
 
 /* ==========================================================================
+   GLOBAL CHATGPT-STYLE SCROLLBAR SYSTEM (UNIVERSAL)
+   ========================================================================== */
+
+/* Universal Firefox thin scrollbar with transparent track across all elements */
+*,
+*::before,
+*::after,
+html,
+body,
+#root {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.4) transparent;
+}
+
+/* Specific Firefox contrast for dark sidebar */
+.app-sidebar,
+.app-sidebar * {
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+/* Universal WebKit / Chromium (Chrome, Edge, Safari, Opera, Electron, WebView) */
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: transparent !important;
+  margin: 2px;
+}
+
+::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 999px;
+  border: none !important;
+  box-shadow: none !important;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.65);
+}
+
+::-webkit-scrollbar-thumb:active,
+*::-webkit-scrollbar-thumb:active {
+  background: rgba(71, 85, 105, 0.85);
+}
+
+/* Completely remove and hide all scrollbar up/down/left/right buttons and arrows */
+::-webkit-scrollbar-button,
+*::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Transparent corner when both horizontal and vertical scrollbars are present */
+::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+
+/* Dark theme elements (e.g. sidebar navigation) custom thumb contrast */
+.app-sidebar ::-webkit-scrollbar-thumb,
+.app-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.app-sidebar:hover ::-webkit-scrollbar-thumb,
+.app-sidebar:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.app-sidebar ::-webkit-scrollbar-thumb:hover,
+.app-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.48);
+}
+
+/* ==========================================================================
    APP SHELL LAYOUT (DESKTOP-FIRST 1440x1024)
    ========================================================================== */
 
@@ -433,33 +516,30 @@ html, body {
 
 .header-left {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.header-title-wrap {
-  display: flex;
   align-items: center;
-  gap: var(--space-1-5);
-}
-
-.header-title {
-  font-size: var(--text-lg);
-  font-weight: 700;
-  color: var(--color-navy-900);
-  letter-spacing: -0.01em;
 }
 
 .header-breadcrumb {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: var(--text-xs);
+  gap: 8px;
+  font-size: 0.8125rem;
   color: var(--color-text-muted);
+}
+
+.breadcrumb-item {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.breadcrumb-current {
+  color: var(--color-navy-900);
+  font-weight: 600;
 }
 
 .breadcrumb-sep {
   color: var(--color-text-subtle);
+  font-size: 0.75rem;
 }
 
 .header-right {
@@ -656,7 +736,7 @@ html, body {
   border-bottom-right-radius: var(--radius-md);
 }
 
-/* KPI Card */
+/* KPI Card - Unified Institutional Financial Summary */
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -664,12 +744,24 @@ html, body {
   margin-bottom: var(--space-2-5);
 }
 
+@media (max-width: 1024px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .kpi-card {
   background: #FFFFFF;
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-md);
-  padding: 18px 20px;
-  box-shadow: var(--shadow-xs);
+  padding: 16px 20px;
+  box-shadow: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
   position: relative;
   display: flex;
@@ -677,7 +769,24 @@ html, body {
 }
 
 .kpi-card:hover {
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-xs);
+  border-color: var(--color-border-strong);
+}
+
+/* Neutralize legacy accent card classes to maintain unified institutional styling */
+.kpi-card.accent-amber,
+.kpi-card.accent-emerald,
+.kpi-card.accent-burgundy,
+.kpi-card.accent-navy {
+  border-left: 1px solid var(--color-border-subtle);
+  border-color: var(--color-border-subtle);
+  background: #FFFFFF;
+}
+
+.kpi-card.accent-amber:hover,
+.kpi-card.accent-emerald:hover,
+.kpi-card.accent-burgundy:hover,
+.kpi-card.accent-navy:hover {
   border-color: var(--color-border-strong);
 }
 
@@ -685,7 +794,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .kpi-label {
@@ -697,30 +806,32 @@ html, body {
 }
 
 .kpi-icon-wrap {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: var(--radius-xs);
-  background: var(--color-bg-surface-subtle);
+  background: var(--color-bg-app);
   border: 1px solid var(--color-border-subtle);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--color-text-secondary);
   transition: all 0.15s ease;
+  flex-shrink: 0;
 }
 
 .kpi-card:hover .kpi-icon-wrap {
   color: var(--color-navy-900);
+  background: var(--color-bg-surface-active);
   border-color: var(--color-border-strong);
 }
 
 .kpi-value {
   font-size: 1.625rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
+  font-weight: 700;
+  color: var(--color-navy-900);
   line-height: 1.15;
   letter-spacing: -0.02em;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1077,15 +1188,92 @@ html, body {
   background-color: #EFF6FF;
 }
 
-/* Table Credit/Debit highlights */
+/* Table Credit/Debit numeric formatting - restrained institutional typography */
 .td-credit {
-  color: var(--color-success-text);
+  color: var(--color-navy-900);
   font-weight: 600;
 }
 
 .td-debit {
-  color: var(--color-danger-text);
+  color: var(--color-navy-900);
   font-weight: 600;
+}
+
+/* Standard Action Dropdown Pattern [ View ] [ ⋮ ] */
+.table-actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.btn-icon-more {
+  padding: 0;
+  height: 28px;
+  width: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-xs);
+  background: #FFFFFF;
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.btn-icon-more:hover {
+  background: var(--color-bg-surface-subtle);
+  color: var(--color-navy-900);
+  border-color: var(--color-border-strong);
+}
+
+.action-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 140px;
+  background: #FFFFFF;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border-subtle);
+  padding: 4px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.action-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 10px;
+  background: none;
+  border: none;
+  border-radius: var(--radius-xs);
+  font-size: 0.8125rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: left;
+  font-weight: 500;
+  transition: background 0.12s ease;
+}
+
+.action-dropdown-item:hover {
+  background: var(--color-bg-surface-active);
+  color: var(--color-navy-900);
+}
+
+.action-dropdown-item.danger {
+  color: var(--color-danger);
+}
+
+.action-dropdown-item.danger:hover {
+  background: var(--color-danger-bg);
 }
 
 /* Table pagination bar */
@@ -1326,6 +1514,7 @@ html, body {
   from { transform: translateX(100%); }
   to { transform: translateX(0); }
 }
+
 
 /* ==========================================================================
    PRINT STYLESHEET (MEMBER STATEMENT / AUDIT CERTIFICATE)

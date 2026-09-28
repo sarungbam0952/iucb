@@ -53,13 +53,15 @@ export const UsersAndRoles: React.FC = () => {
   // Permission Matrix definitions
   const matrix = [
     { module: 'Dashboard & Trust Overview', admin: 'Full View & Export', dataEntry: 'View Only', committee: 'View Only', member: 'Personal Overview Only' },
-    { module: 'Member Master Records', admin: 'Create, Edit, Delete', dataEntry: 'Create & Edit (Requires Review)', committee: 'View Only', member: 'Personal Profile (Read / Request Update)' },
-    { module: 'Monthly Contributions', admin: 'Approve & Post to Ledger', dataEntry: 'Enter & Submit', committee: 'View Only', member: 'Personal Monthly Deductions Only' },
-    { module: 'Loan Claims & Sanctions', admin: 'Final Sanction Posting', dataEntry: 'Enter Loan Claim', committee: 'Review & Record Decision', member: 'Submit Claim & View Own Schedule' },
-    { module: '18-Year Service Advance', admin: 'Sanction & Issue Order', dataEntry: 'Verify Service History', committee: 'Review Eligibility', member: 'Check Eligibility & Submit Advance Request' },
-    { module: 'Retirement Settlements', admin: 'Final Settlement Sign-off', dataEntry: 'Calculate & Submit Draft', committee: 'Certification', member: 'View Superannuation Projection' },
-    { module: 'Audit Trail Inspection', admin: 'Full Unrestricted Access', dataEntry: 'View Personal Activity', committee: 'View Decision Logs', member: 'No Access' },
-    { module: 'System & Parameter Config', admin: 'Full Configuration', dataEntry: 'No Access', committee: 'No Access', member: 'No Access' },
+    { module: 'Member Master Records', admin: 'Create, Edit, Delete', dataEntry: 'Create & Edit Details', committee: 'View Only', member: 'Personal Profile (Read-Only)' },
+    { module: 'Monthly Contributions', admin: 'Create, Edit, Cancel, Import', dataEntry: 'Create & Edit Entries', committee: 'View Only', member: 'Personal Monthly Deductions Only' },
+    { module: 'Withdrawals Register', admin: 'Record, Edit & Cancel', dataEntry: 'Record & Edit Entries', committee: 'View Only', member: 'Personal Withdrawals Only' },
+    { module: 'Loans & Repayments', admin: 'Create, Edit, Repay & Foreclose', dataEntry: 'Create, Edit & Add Repayments', committee: 'View Only', member: 'Submit Claim & View Own Schedule' },
+    { module: 'Retirement Settlements', admin: 'View & Manage Settlements', dataEntry: 'View & Calculate Draft', committee: 'View Only', member: 'View Superannuation Projection' },
+    { module: 'Trust Fund & Investments', admin: 'Create, Edit & Manage', dataEntry: 'Create & Edit Placements', committee: 'View Only', member: 'No Access' },
+    { module: 'Financial & Operational Reports', admin: 'Full View & Export', dataEntry: 'Full View & Export', committee: 'View & Export', member: 'Personal Statements Only' },
+    { module: 'Audit Trail Inspection', admin: 'Full Unrestricted Access', dataEntry: 'View Personal Activity', committee: 'View Only', member: 'No Access' },
+    { module: 'Users, Roles & System Settings', admin: 'Full Configuration Authority', dataEntry: 'No Access', committee: 'No Access', member: 'No Access' },
   ];
 
   return (
@@ -173,11 +175,11 @@ export const UsersAndRoles: React.FC = () => {
                   <td style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{u.lastLogin}</td>
                   <td className="align-right" style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
                     {u.role === 'Admin'
-                      ? 'Full System Authority'
+                      ? 'Full System Authority (Admin Config & Management)'
                       : u.role === 'Data Entry'
-                        ? 'Operational Entry (No Approval)'
+                        ? 'Operational Create & Edit Records'
                         : u.role === 'Trust Committee'
-                          ? 'Recommendation / Review'
+                          ? 'Strictly View-Only Access'
                           : 'Self-Service (Restricted to Own Account)'}
                   </td>
                 </tr>

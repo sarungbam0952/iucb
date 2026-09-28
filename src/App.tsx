@@ -9,20 +9,26 @@ import { Dashboard } from './pages/Dashboard/Dashboard';
 import { MembersList } from './pages/Members/MembersList';
 import { MemberProfile } from './pages/Members/MemberProfile';
 import { ContributionsPage } from './pages/Contributions/ContributionsPage';
+import { WithdrawalsPage } from './pages/Withdrawals/WithdrawalsPage';
 import { IndividualAccountLedger } from './pages/Ledger/IndividualAccountLedger';
 import { NomineesPage } from './pages/Members/NomineesPage';
 import { TrustFundPoolPage } from './pages/FundPool/TrustFundPoolPage';
 import { LoanManagement } from './pages/Loans/LoanManagement';
-import { Advance18YearPage } from './pages/Advances/Advance18YearPage';
+import { LoanDetailsPage } from './pages/Loans/LoanDetailsPage';
 import { RetirementSettlementPage } from './pages/Retirement/RetirementSettlementPage';
-import { ApprovalsPage } from './pages/Approvals/ApprovalsPage';
-import { ReportsPage } from './pages/Reports/ReportsPage';
+import { InvestmentsPage } from './pages/Investments/InvestmentsPage';
 import { FundPoolReportPage } from './pages/Reports/FundPoolReportPage';
 import { MemberStatementsReportPage } from './pages/Reports/MemberStatementsReportPage';
 import { LoanRegisterReportPage } from './pages/Reports/LoanRegisterReportPage';
-import { AdvanceTrackerReportPage } from './pages/Reports/AdvanceTrackerReportPage';
+import { TrustFundActivityJournalReportPage } from './pages/Reports/TrustFundActivityJournalReportPage';
 import { RetirementPipelineReportPage } from './pages/Reports/RetirementPipelineReportPage';
 import { AuditTrailReportPage } from './pages/Reports/AuditTrailReportPage';
+import { BalanceSheetReportPage } from './pages/Reports/BalanceSheetReportPage';
+import { ChargeAnalysisReportPage } from './pages/Reports/ChargeAnalysisReportPage';
+import { ProfitLossReportPage } from './pages/Reports/ProfitLossReportPage';
+import { LoanReportPage } from './pages/Reports/LoanReportPage';
+import { AccountStatementReportPage } from './pages/Reports/AccountStatementReportPage';
+import { TransferScrollReportPage } from './pages/Reports/TransferScrollReportPage';
 import { AuditTrailPage } from './pages/Audit/AuditTrailPage';
 import { UsersAndRoles } from './pages/Administration/UsersAndRoles';
 import { SystemSettingsPage } from './pages/Administration/SystemSettings';
@@ -45,6 +51,8 @@ const AppContent: React.FC = () => {
         return <MemberProfile />;
       case 'contributions':
         return <ContributionsPage />;
+      case 'withdrawals':
+        return <WithdrawalsPage />;
       case 'ledger':
         return <IndividualAccountLedger />;
       case 'nominees':
@@ -53,32 +61,46 @@ const AppContent: React.FC = () => {
         return <TrustFundPoolPage />;
       case 'loans':
         return <LoanManagement />;
-      case 'advances':
-        return <Advance18YearPage />;
+      case 'loan-details':
+        return <LoanDetailsPage />;
       case 'retirement':
         return <RetirementSettlementPage />;
-      case 'approvals':
-        return <ApprovalsPage />;
+      case 'investments':
+        return <InvestmentsPage />;
       case 'reports':
-        return <ReportsPage />;
       case 'reports-fund-pool':
         return <FundPoolReportPage />;
       case 'reports-member-statements':
         return <MemberStatementsReportPage />;
       case 'reports-loan-register':
         return <LoanRegisterReportPage />;
-      case 'reports-18-year-advance':
-        return <AdvanceTrackerReportPage />;
+      case 'reports-trust-fund-journal':
+        return <TrustFundActivityJournalReportPage />;
       case 'reports-retirement-pipeline':
         return <RetirementPipelineReportPage />;
       case 'reports-audit-trail':
         return <AuditTrailReportPage />;
+      case 'reports-balance-sheet':
+        return <BalanceSheetReportPage />;
+      case 'reports-charge-analysis':
+        return <ChargeAnalysisReportPage />;
+      case 'reports-profit-loss':
+        return <ProfitLossReportPage />;
+      case 'reports-loan-report':
+        return <LoanReportPage />;
+      case 'reports-account-statement':
+        return <AccountStatementReportPage />;
+      case 'reports-transfer-scroll':
+        return <TransferScrollReportPage />;
       case 'audit-trail':
         return <AuditTrailPage />;
       case 'users-roles':
         return <UsersAndRoles />;
       case 'system-settings':
         return <SystemSettingsPage />;
+      case 'advances':
+      case 'reports-18-year-advance':
+        return <TrustFundPoolPage />;
       default:
         return <Dashboard />;
     }

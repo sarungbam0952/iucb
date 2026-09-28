@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { formatDate } from '../../utils/dateFormat';
 
 export const NomineesPage: React.FC = () => {
   const { members, setSelectedMemberId, setActivePage } = useApp();
@@ -149,7 +150,7 @@ export const NomineesPage: React.FC = () => {
                   <td>
                     <StatusBadge status={nom.status} size="sm" />
                   </td>
-                  <td style={{ fontSize: '0.75rem' }}>{nom.lastUpdated}</td>
+                  <td style={{ fontSize: '0.75rem' }}>{formatDate(nom.lastUpdated)}</td>
                   <td className="align-right">
                     <button
                       className="btn btn-secondary btn-sm"

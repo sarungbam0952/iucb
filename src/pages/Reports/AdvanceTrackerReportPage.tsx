@@ -11,6 +11,8 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { KpiCard } from '../../components/common/KpiCard';
+import { formatDate } from '../../utils/dateFormat';
 
 export const AdvanceTrackerReportPage: React.FC = () => {
   const {
@@ -85,49 +87,33 @@ export const AdvanceTrackerReportPage: React.FC = () => {
 
       {/* 4 SUMMARY METRIC CARDS */}
       <div className="kpi-grid">
-        <div className="kpi-card accent-navy">
-          <div className="kpi-header">
-            <span className="kpi-label">TRACKED SENIOR CADRE</span>
-            <div className="kpi-icon-wrap" style={{ background: '#EFF6FF', color: 'var(--color-navy-900)' }}>
-              <Award size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{advances.length}</div>
-          <div className="kpi-desc">Staff monitored for 18-year unbroken milestone</div>
-        </div>
+        <KpiCard
+          label="Tracked Senior Cadre"
+          value={advances.length}
+          icon={Award}
+          desc="Staff monitored for 18-year unbroken milestone"
+        />
 
-        <div className="kpi-card accent-emerald">
-          <div className="kpi-header">
-            <span className="kpi-label">REACHED 18-YR TENURE</span>
-            <div className="kpi-icon-wrap" style={{ background: '#ECFDF5', color: '#059669' }}>
-              <CheckCircle2 size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{totalEligible}</div>
-          <div className="kpi-desc">Eligible for up to 50% non-refundable advance</div>
-        </div>
+        <KpiCard
+          label="Reached 18-Yr Tenure"
+          value={totalEligible}
+          icon={CheckCircle2}
+          desc="Eligible for up to 50% non-refundable advance"
+        />
 
-        <div className="kpi-card accent-burgundy">
-          <div className="kpi-header">
-            <span className="kpi-label">TOTAL DISBURSED ADVANCES</span>
-            <div className="kpi-icon-wrap" style={{ background: 'var(--color-burgundy-50)', color: 'var(--color-burgundy-700)' }}>
-              <ShieldCheck size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(totalDisbursedAmount)}</div>
-          <div className="kpi-desc">{totalGranted} claims approved and settled</div>
-        </div>
+        <KpiCard
+          label="Total Disbursed Advances"
+          value={formatCurrency(totalDisbursedAmount)}
+          icon={ShieldCheck}
+          desc={`${totalGranted} claims approved and settled`}
+        />
 
-        <div className="kpi-card accent-amber">
-          <div className="kpi-header">
-            <span className="kpi-label">APPROACHING 18-YR MILESTONE</span>
-            <div className="kpi-icon-wrap" style={{ background: '#FFFBEB', color: '#D97706' }}>
-              <Clock size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{approachingCount}</div>
-          <div className="kpi-desc">Staff within 12 months of eligibility</div>
-        </div>
+        <KpiCard
+          label="Approaching 18-Yr Milestone"
+          value={approachingCount}
+          icon={Clock}
+          desc="Staff within 12 months of eligibility"
+        />
       </div>
 
       {/* FILTER & SEARCH TOOLBAR */}
@@ -196,11 +182,11 @@ export const AdvanceTrackerReportPage: React.FC = () => {
                   </td>
                   <td style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{a.memberId}</td>
                   <td>{a.department}</td>
-                  <td style={{ fontSize: '0.8125rem' }}>{a.joiningDate}</td>
+                  <td style={{ fontSize: '0.8125rem' }}>{formatDate(a.joiningDate)}</td>
                   <td className="align-center" style={{ fontWeight: 700, color: a.yearsOfService >= 18 ? 'var(--color-navy-900)' : 'var(--color-text-muted)' }}>
                     {a.yearsOfService} Years
                   </td>
-                  <td style={{ fontSize: '0.8125rem' }}>{a.eligibilityDate}</td>
+                  <td style={{ fontSize: '0.8125rem' }}>{formatDate(a.eligibilityDate)}</td>
                   <td>
                     <StatusBadge status={a.advanceStatus} size="sm" />
                   </td>

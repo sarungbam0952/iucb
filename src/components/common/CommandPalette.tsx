@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, User, CreditCard, Receipt, FileText, ShieldAlert, ArrowRight, X } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { formatDateTime } from '../../utils/dateFormat';
 
 export const CommandPalette: React.FC = () => {
   const {
@@ -307,7 +308,7 @@ export const CommandPalette: React.FC = () => {
                         {a.id} — {a.action} ({a.module})
                       </div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                        {a.details} • {a.timestamp}
+                        {a.details} • {formatDateTime(a.timestamp)}
                       </div>
                     </div>
                   </div>

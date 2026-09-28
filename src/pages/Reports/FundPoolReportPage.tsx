@@ -11,6 +11,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { KpiCard } from '../../components/common/KpiCard';
 
 export const FundPoolReportPage: React.FC = () => {
   const { formatCurrency } = useApp();
@@ -112,49 +113,33 @@ export const FundPoolReportPage: React.FC = () => {
 
       {/* 4 SUMMARY METRIC CARDS */}
       <div className="kpi-grid">
-        <div className="kpi-card accent-navy">
-          <div className="kpi-header">
-            <span className="kpi-label">TOTAL CONSOLIDATED POOL</span>
-            <div className="kpi-icon-wrap" style={{ background: '#EFF6FF', color: 'var(--color-navy-900)' }}>
-              <Landmark size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(53240000)}</div>
-          <div className="kpi-desc">100.0% of audited Trust corpus as of FY 2026-27</div>
-        </div>
+        <KpiCard
+          label="Total Consolidated Pool"
+          value={formatCurrency(53240000)}
+          icon={Landmark}
+          desc="100.0% of audited Trust corpus as of FY 2026-27"
+        />
 
-        <div className="kpi-card accent-emerald">
-          <div className="kpi-header">
-            <span className="kpi-label">LIQUID BANK RESERVES</span>
-            <div className="kpi-icon-wrap" style={{ background: '#ECFDF5', color: '#059669' }}>
-              <Building2 size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(33450000)}</div>
-          <div className="kpi-desc">62.8% in operational and fixed term accounts</div>
-        </div>
+        <KpiCard
+          label="Liquid Bank Reserves"
+          value={formatCurrency(33450000)}
+          icon={Building2}
+          desc="62.8% in operational and fixed term accounts"
+        />
 
-        <div className="kpi-card accent-burgundy">
-          <div className="kpi-header">
-            <span className="kpi-label">ACCRUED INTEREST RECEIVABLES</span>
-            <div className="kpi-icon-wrap" style={{ background: 'var(--color-burgundy-50)', color: 'var(--color-burgundy-700)' }}>
-              <TrendingUp size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(14040000)}</div>
-          <div className="kpi-desc">26.4% yield return on term deposits</div>
-        </div>
+        <KpiCard
+          label="Accrued Interest Receivables"
+          value={formatCurrency(14040000)}
+          icon={TrendingUp}
+          desc="26.4% yield return on term deposits"
+        />
 
-        <div className="kpi-card">
-          <div className="kpi-header">
-            <span className="kpi-label">MEMBER LOAN ASSETS</span>
-            <div className="kpi-icon-wrap">
-              <PieChart size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(5750000)}</div>
-          <div className="kpi-desc">10.8% active borrowings secured against PF</div>
-        </div>
+        <KpiCard
+          label="Member Loan Assets"
+          value={formatCurrency(5750000)}
+          icon={PieChart}
+          desc="10.8% active borrowings secured against PF"
+        />
       </div>
 
       {/* FILTER & DATE CONTROLS */}
@@ -240,7 +225,7 @@ export const FundPoolReportPage: React.FC = () => {
               <tr style={{ background: '#F8FAFC', fontWeight: 800 }}>
                 <td style={{ fontFamily: 'var(--font-mono)' }}>TOTAL</td>
                 <td colSpan={2} style={{ color: 'var(--color-navy-900)' }}>
-                  CONSOLIDATED TRUST POOL CORPUS (AS ON 22 SEP 2026)
+                  CONSOLIDATED TRUST POOL CORPUS (AS ON 22/09/2026)
                 </td>
                 <td className="align-right num" style={{ fontSize: '1.0625rem', color: 'var(--color-navy-900)' }}>
                   {formatCurrency(53240000)}
@@ -288,14 +273,14 @@ export const FundPoolReportPage: React.FC = () => {
                 <td style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>IUCB-TR-FD-9921</td>
                 <td>IUCB Main Branch — 3-Year Fixed Deposit Corpus Certificate (Tranche A)</td>
                 <td>7.85% p.a.</td>
-                <td>14 March 2027</td>
+                <td>14/03/2027</td>
                 <td className="align-right num" style={{ fontWeight: 700 }}>{formatCurrency(15000000)}</td>
               </tr>
               <tr>
                 <td style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>IUCB-TR-FD-9945</td>
                 <td>IUCB Singjamei Branch — 2-Year Fixed Deposit Corpus Certificate (Tranche B)</td>
                 <td>7.70% p.a.</td>
-                <td>08 October 2027</td>
+                <td>08/10/2027</td>
                 <td className="align-right num" style={{ fontWeight: 700 }}>{formatCurrency(14000000)}</td>
               </tr>
               <tr style={{ background: '#F8FAFC', fontWeight: 700 }}>

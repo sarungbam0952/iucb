@@ -12,7 +12,9 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { KpiCard } from '../../components/common/KpiCard';
 import { AuditLog } from '../../types';
+import { formatDateTime } from '../../utils/dateFormat';
 
 export const AuditTrailReportPage: React.FC = () => {
   const { auditLogs } = useApp();
@@ -92,49 +94,33 @@ export const AuditTrailReportPage: React.FC = () => {
 
       {/* 4 SUMMARY METRIC CARDS */}
       <div className="kpi-grid">
-        <div className="kpi-card accent-burgundy">
-          <div className="kpi-header">
-            <span className="kpi-label">TOTAL LOGGED AUDIT EVENTS</span>
-            <div className="kpi-icon-wrap" style={{ background: 'var(--color-burgundy-50)', color: 'var(--color-burgundy-700)' }}>
-              <History size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{totalEvents}</div>
-          <div className="kpi-desc">Immutable system event log entries</div>
-        </div>
+        <KpiCard
+          label="Total Logged Audit Events"
+          value={totalEvents}
+          icon={History}
+          desc="Immutable system event log entries"
+        />
 
-        <div className="kpi-card accent-navy">
-          <div className="kpi-header">
-            <span className="kpi-label">FINANCIAL MODIFICATIONS</span>
-            <div className="kpi-icon-wrap" style={{ background: '#EFF6FF', color: 'var(--color-navy-900)' }}>
-              <ShieldAlert size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{financialEvents}</div>
-          <div className="kpi-desc">Ledger balances, deductions, or loans</div>
-        </div>
+        <KpiCard
+          label="Financial Modifications"
+          value={financialEvents}
+          icon={ShieldAlert}
+          desc="Ledger balances, deductions, or loans"
+        />
 
-        <div className="kpi-card">
-          <div className="kpi-header">
-            <span className="kpi-label">ACTIVE SYSTEM OPERATORS</span>
-            <div className="kpi-icon-wrap">
-              <Users size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{uniqueOperators}</div>
-          <div className="kpi-desc">Admin, Data Entry, and Committee actors</div>
-        </div>
+        <KpiCard
+          label="Active System Operators"
+          value={uniqueOperators}
+          icon={Users}
+          desc="Admin, Data Entry, and Committee actors"
+        />
 
-        <div className="kpi-card accent-emerald">
-          <div className="kpi-header">
-            <span className="kpi-label">INTEGRITY VERIFICATION</span>
-            <div className="kpi-icon-wrap" style={{ background: '#ECFDF5', color: '#059669' }}>
-              <ShieldCheck size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">100%</div>
-          <div className="kpi-desc">Cryptographically chained audit hashes</div>
-        </div>
+        <KpiCard
+          label="Integrity Verification"
+          value="100%"
+          icon={ShieldCheck}
+          desc="Cryptographically chained audit hashes"
+        />
       </div>
 
       {/* FILTER & SEARCH TOOLBAR */}
@@ -220,7 +206,7 @@ export const AuditTrailReportPage: React.FC = () => {
             <tbody>
               {filteredLogs.map((al) => (
                 <tr key={al.id}>
-                  <td style={{ fontSize: '0.75rem', whiteSpace: 'nowrap' }}>{al.timestamp}</td>
+                  <td style={{ fontSize: '0.75rem', whiteSpace: 'nowrap' }}>{formatDateTime(al.timestamp)}</td>
                   <td style={{ fontWeight: 600, color: 'var(--color-navy-900)' }}>{al.user}</td>
                   <td>
                     <span className="badge badge-neutral">{al.role}</span>
@@ -269,7 +255,7 @@ export const AuditTrailReportPage: React.FC = () => {
                 </div>
                 <div>
                   <span style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem' }}>TIMESTAMP</span>
-                  <div style={{ fontWeight: 600 }}>{inspectLog.timestamp}</div>
+                  <div style={{ fontWeight: 600 }}>{formatDateTime(inspectLog.timestamp)}</div>
                 </div>
                 <div>
                   <span style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem' }}>OPERATOR</span>

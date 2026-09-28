@@ -14,7 +14,9 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { KpiCard } from '../../components/common/KpiCard';
 import { TrustFundGrowthChart, FundCompositionChart } from '../../components/common/FinancialChart';
+import { formatDate, formatDateTime } from '../../utils/dateFormat';
 
 export const Dashboard: React.FC = () => {
   const {
@@ -56,111 +58,55 @@ export const Dashboard: React.FC = () => {
             Good morning, {currentRole === 'Admin' ? 'Admin' : currentRole === 'Data Entry' ? 'Kh. Tombi' : 'Committee Member'}
           </h2>
           <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', marginTop: '3px', margin: 0 }}>
-            Here's an overview of the IUCB Employee Trust. Current recorded pool balance & member activity as of 22 Sep 2026.
+            Here's an overview of the IUCB Employee Trust. Current recorded pool balance & member activity as of 22/09/2026.
           </p>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button
             className="btn btn-secondary btn-sm"
-            onClick={() => setActivePage('reports')}
+            onClick={() => setActivePage('reports-fund-pool')}
           >
             Generate Statements
           </button>
-          {currentRole !== 'Data Entry' && (
-            <button
-              className="btn btn-accent btn-sm"
-              onClick={() => setActivePage('approvals')}
-            >
-              Review Approvals ({pendingLoans.length})
-            </button>
-          )}
         </div>
       </div>
 
       {/* 4 PRIMARY KPI CARDS - UNIFIED INSTITUTIONAL FINANCIAL SUMMARY */}
       <div className="kpi-grid">
-        {/* KPI 1: TOTAL TRUST FUND */}
-        <div
-          className="kpi-card"
+        <KpiCard
+          label="Total Trust Fund"
+          value={formatCurrency(totalFundBalance)}
+          icon={Landmark}
           onClick={() => setActivePage('fund-pool')}
-          style={{ cursor: 'pointer' }}
-        >
-          <div className="kpi-header">
-            <span className="kpi-label">Total Trust Fund</span>
-            <div className="kpi-icon-wrap">
-              <Landmark size={15} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(totalFundBalance)}</div>
-          <div className="kpi-desc">
-            <span className="kpi-trend positive">
-              <TrendingUp size={11} strokeWidth={2.2} /> +8.4%
-            </span>
-            <span>Current recorded pool balance</span>
-          </div>
-        </div>
+          trend={{ text: '+8.4%', type: 'positive' }}
+          desc="Current recorded pool balance"
+        />
 
-        {/* KPI 2: TOTAL MEMBERS */}
-        <div
-          className="kpi-card"
+        <KpiCard
+          label="Total Members"
+          value={totalMembersCount}
+          icon={Users}
           onClick={() => setActivePage('members-all')}
-          style={{ cursor: 'pointer' }}
-        >
-          <div className="kpi-header">
-            <span className="kpi-label">Total Members</span>
-            <div className="kpi-icon-wrap">
-              <Users size={15} />
-            </div>
-          </div>
-          <div className="kpi-value num">{totalMembersCount}</div>
-          <div className="kpi-desc">
-            <span className="kpi-trend positive">
-              <ShieldCheck size={11} strokeWidth={2.2} /> 100%
-            </span>
-            <span>{activeMembersCount} Active Trust members</span>
-          </div>
-        </div>
+          trend={{ text: '100%', type: 'positive' }}
+          desc={`${activeMembersCount} Active Trust members`}
+        />
 
-        {/* KPI 3: TOTAL CONTRIBUTIONS */}
-        <div
-          className="kpi-card"
+        <KpiCard
+          label="Total Contributions"
+          value={formatCurrency(totalContributions)}
+          icon={PiggyBank}
           onClick={() => setActivePage('contributions')}
-          style={{ cursor: 'pointer' }}
-        >
-          <div className="kpi-header">
-            <span className="kpi-label">Total Contributions</span>
-            <div className="kpi-icon-wrap">
-              <PiggyBank size={15} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(totalContributions)}</div>
-          <div className="kpi-desc">
-            <span className="kpi-trend neutral">
-              <ArrowUpRight size={11} strokeWidth={2.2} /> ₹8.4L/mo
-            </span>
-            <span>Recorded member contributions</span>
-          </div>
-        </div>
+          trend={{ text: '₹8.4L/mo', type: 'neutral' }}
+          desc="Recorded member contributions"
+        />
 
-        {/* KPI 4: OUTSTANDING LOANS */}
-        <div
-          className="kpi-card"
+        <KpiCard
+          label="Outstanding Loans"
+          value={formatCurrency(totalOutstandingLoanAmount)}
+          icon={CreditCard}
           onClick={() => setActivePage('loans')}
-          style={{ cursor: 'pointer' }}
-        >
-          <div className="kpi-header">
-            <span className="kpi-label">Outstanding Loans</span>
-            <div className="kpi-icon-wrap">
-              <CreditCard size={15} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(totalOutstandingLoanAmount)}</div>
-          <div className="kpi-desc">
-            <span className="kpi-stat-badge">{activeLoans.length} active</span>
-            <span style={{ color: 'var(--color-border-strong)' }}>•</span>
-            <span>Current principal outstanding</span>
-          </div>
-        </div>
+          desc={`${activeLoans.length} active • Current principal outstanding`}
+        />
       </div>
 
       {/* CHARTS ROW: TRUST FUND OVERVIEW + FUND COMPOSITION */}
@@ -269,7 +215,7 @@ export const Dashboard: React.FC = () => {
                   <td className="align-right num" style={{ fontWeight: 600, fontSize: '0.8125rem', color: 'var(--color-text-primary)' }}>
                     {formatCurrency(loan.requestedAmount)}
                   </td>
-                  <td style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>{loan.applicationDate}</td>
+                  <td style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>{formatDate(loan.applicationDate)}</td>
                   <td>
                     <StatusBadge status={loan.status} />
                   </td>
@@ -278,7 +224,7 @@ export const Dashboard: React.FC = () => {
                       className="btn btn-secondary btn-sm"
                       onClick={() => {
                         setSelectedLoanId(loan.id);
-                        setActivePage('loans');
+                        setActivePage('loan-details');
                       }}
                     >
                       View Details
@@ -316,11 +262,11 @@ export const Dashboard: React.FC = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
               <div style={{ padding: '10px 12px', background: '#FFFFFF', borderRadius: '6px', border: '1px solid var(--color-border-subtle)' }}>
                 <span style={{ fontSize: '0.6875rem', color: 'var(--color-text-secondary)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>Eligible</span>
-                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-success-text)', marginTop: '2px', display: 'block' }} className="num">{eligibleAdvances.length}</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-navy-900)', marginTop: '2px', display: 'block' }} className="num">{eligibleAdvances.length}</span>
               </div>
               <div style={{ padding: '10px 12px', background: '#FFFFFF', borderRadius: '6px', border: '1px solid var(--color-border-subtle)' }}>
                 <span style={{ fontSize: '0.6875rem', color: 'var(--color-text-secondary)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>Approaching</span>
-                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-warning-text)', marginTop: '2px', display: 'block' }} className="num">{approachingAdvances.length}</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-navy-900)', marginTop: '2px', display: 'block' }} className="num">{approachingAdvances.length}</span>
               </div>
               <div style={{ padding: '10px 12px', background: '#FFFFFF', borderRadius: '6px', border: '1px solid var(--color-border-subtle)' }}>
                 <span style={{ fontSize: '0.6875rem', color: 'var(--color-text-secondary)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 600 }}>Granted</span>
@@ -351,7 +297,7 @@ export const Dashboard: React.FC = () => {
                     <div>
                       <div style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-navy-900)' }}>{adv.memberName}</div>
                       <div style={{ fontSize: '0.6875rem', color: 'var(--color-text-secondary)', marginTop: '1px' }}>
-                        Joined {adv.joiningDate} • {adv.yearsOfService} Yrs of Service
+                        Joined {formatDate(adv.joiningDate)} • {adv.yearsOfService} Yrs of Service
                       </div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
@@ -399,7 +345,7 @@ export const Dashboard: React.FC = () => {
                       <div style={{ fontWeight: 600, fontSize: '0.8125rem', color: 'var(--color-text-primary)' }}>{ret.memberName}</div>
                       <div style={{ fontSize: '0.6875rem', color: 'var(--color-text-secondary)' }}>{ret.employeeId}</div>
                     </td>
-                    <td style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>{ret.retirementDate}</td>
+                    <td style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>{formatDate(ret.retirementDate)}</td>
                     <td className="align-right num" style={{ fontWeight: 600, fontSize: '0.8125rem', color: 'var(--color-navy-900)' }}>
                       {formatCurrency(ret.settlementAmount)}
                     </td>
@@ -446,7 +392,7 @@ export const Dashboard: React.FC = () => {
                 }}
               >
                 <div style={{ minWidth: '130px', fontSize: '0.6875rem', fontFamily: 'var(--font-mono)', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
-                  {log.timestamp}
+                  {formatDateTime(log.timestamp)}
                 </div>
                 <div style={{ minWidth: '90px' }}>
                   <span className="badge badge-neutral" style={{ fontSize: '0.6875rem' }}>{log.role}</span>

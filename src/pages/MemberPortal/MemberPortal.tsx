@@ -34,6 +34,8 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { StatusBadge } from '../../components/common/StatusBadge';
+import { KpiCard } from '../../components/common/KpiCard';
+import { formatDate, formatDateTime } from '../../utils/dateFormat';
 
 export const MemberPortal: React.FC = () => {
   const {
@@ -215,61 +217,33 @@ export const MemberPortal: React.FC = () => {
 
       {/* KPI GRID */}
       <div className="kpi-grid">
-        <div className="kpi-card accent-burgundy">
-          <div className="kpi-header">
-            <span className="kpi-label">TOTAL ACCUMULATED PF</span>
-            <div className="kpi-icon-wrap" style={{ background: 'var(--color-burgundy-50)', color: 'var(--color-burgundy-700)' }}>
-              <Wallet size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(currentMember.currentBalance)}</div>
-          <div className="kpi-desc">
-            Principal: {formatCurrency(currentMember.totalContribution)} + Interest: {formatCurrency(currentMember.totalInterest)}
-          </div>
-        </div>
+        <KpiCard
+          label="Total Accumulated PF"
+          value={formatCurrency(currentMember.currentBalance)}
+          icon={Wallet}
+          desc={`Principal: ${formatCurrency(currentMember.totalContribution)} + Interest: ${formatCurrency(currentMember.totalInterest)}`}
+        />
 
-        <div className="kpi-card accent-navy">
-          <div className="kpi-header">
-            <span className="kpi-label">MONTHLY DEDUCTION</span>
-            <div className="kpi-icon-wrap" style={{ background: '#EFF6FF', color: 'var(--color-navy-700)' }}>
-              <CircleDollarSign size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(monthlyDeduction)}</div>
-          <div className="kpi-desc">
-            {currentMember.contributionPercentage}% of Basic Salary ({formatCurrency(currentMember.salary)})
-          </div>
-        </div>
+        <KpiCard
+          label="Monthly Deduction"
+          value={formatCurrency(monthlyDeduction)}
+          icon={CircleDollarSign}
+          desc={`${currentMember.contributionPercentage}% of Basic Salary (${formatCurrency(currentMember.salary)})`}
+        />
 
-        <div className="kpi-card accent-amber">
-          <div className="kpi-header">
-            <span className="kpi-label">ACTIVE LOAN BALANCE</span>
-            <div className="kpi-icon-wrap" style={{ background: '#FFFBEB', color: '#D97706' }}>
-              <CreditCard size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num" style={{ color: currentMember.outstandingLoan > 0 ? '#B45309' : 'inherit' }}>
-            {formatCurrency(currentMember.outstandingLoan)}
-          </div>
-          <div className="kpi-desc">
-            {currentMember.outstandingLoan > 0 ? 'Monthly recovery EMI: ₹5,200 via payroll' : 'No active loan liability'}
-          </div>
-        </div>
+        <KpiCard
+          label="Active Loan Balance"
+          value={formatCurrency(currentMember.outstandingLoan)}
+          icon={CreditCard}
+          desc={currentMember.outstandingLoan > 0 ? 'Monthly recovery EMI: ₹5,200 via payroll' : 'No active loan liability'}
+        />
 
-        <div className="kpi-card accent-emerald">
-          <div className="kpi-header">
-            <span className="kpi-label">18-YEAR ADVANCE STATUS</span>
-            <div className="kpi-icon-wrap" style={{ background: '#ECFDF5', color: '#059669' }}>
-              <Award size={18} />
-            </div>
-          </div>
-          <div className="kpi-value" style={{ color: '#059669', fontSize: '1.25rem', fontWeight: 800 }}>
-            {isAdvanceEligible ? 'Eligible (22 Yrs)' : `${yearsOfService} / 18 Yrs`}
-          </div>
-          <div className="kpi-desc">
-            {isAdvanceEligible ? 'Completed milestone on 15-Mar-2022' : 'Advance available after 18 years'}
-          </div>
-        </div>
+        <KpiCard
+          label="18-Year Advance Status"
+          value={isAdvanceEligible ? 'Eligible (22 Yrs)' : `${yearsOfService} / 18 Yrs`}
+          icon={Award}
+          desc={isAdvanceEligible ? 'Completed milestone on 15-Mar-2022' : 'Advance available after 18 years'}
+        />
       </div>
 
       {/* QUICK TILES & SUMMARY */}
@@ -457,7 +431,7 @@ export const MemberPortal: React.FC = () => {
             <tbody>
               {memberLedger.slice(0, 5).map((entry) => (
                 <tr key={entry.id}>
-                  <td style={{ fontWeight: 500 }}>{entry.date}</td>
+                  <td style={{ fontWeight: 500 }}>{formatDate(entry.date)}</td>
                   <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 600 }}>{entry.referenceNo}</td>
                   <td>
                     <span className="badge badge-neutral">{entry.transactionType}</span>
@@ -546,7 +520,7 @@ export const MemberPortal: React.FC = () => {
               Date of Joining & Service
             </span>
             <span style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--color-navy-900)' }}>
-              {currentMember.dateOfJoining}
+              {formatDate(currentMember.dateOfJoining)}
             </span>
             <span style={{ fontSize: '0.75rem', color: '#059669', display: 'block', fontWeight: 600 }}>
               {yearsOfService} Years Unbroken Service
@@ -582,7 +556,7 @@ export const MemberPortal: React.FC = () => {
               Date of Birth & Age
             </span>
             <span style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--color-navy-900)' }}>
-              {currentMember.dob} (Age 52)
+              {formatDate(currentMember.dob)} (Age 52)
             </span>
             <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', display: 'block' }}>
               Gender: {currentMember.gender}
@@ -634,38 +608,26 @@ export const MemberPortal: React.FC = () => {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {/* KPI Strip */}
         <div className="kpi-grid">
-          <div className="kpi-card accent-burgundy">
-            <div className="kpi-header">
-              <span className="kpi-label">TOTAL PRINCIPAL CONTRIBUTED</span>
-              <div className="kpi-icon-wrap" style={{ background: 'var(--color-burgundy-50)', color: 'var(--color-burgundy-700)' }}>
-                <CircleDollarSign size={18} />
-              </div>
-            </div>
-            <div className="kpi-value num">{formatCurrency(currentMember.totalContribution)}</div>
-            <div className="kpi-desc">Lifetime employee payroll deductions</div>
-          </div>
+          <KpiCard
+            label="Total Principal Contributed"
+            value={formatCurrency(currentMember.totalContribution)}
+            icon={CircleDollarSign}
+            desc="Lifetime employee payroll deductions"
+          />
 
-          <div className="kpi-card accent-navy">
-            <div className="kpi-header">
-              <span className="kpi-label">CURRENT DEDUCTION RATE</span>
-              <div className="kpi-icon-wrap" style={{ background: '#EFF6FF', color: 'var(--color-navy-700)' }}>
-                <TrendingUp size={18} />
-              </div>
-            </div>
-            <div className="kpi-value num">{currentMember.contributionPercentage}%</div>
-            <div className="kpi-desc">{formatCurrency(monthlyDeduction)} / month from basic salary</div>
-          </div>
+          <KpiCard
+            label="Current Deduction Rate"
+            value={`${currentMember.contributionPercentage}%`}
+            icon={TrendingUp}
+            desc={`${formatCurrency(monthlyDeduction)} / month from basic salary`}
+          />
 
-          <div className="kpi-card accent-emerald">
-            <div className="kpi-header">
-              <span className="kpi-label">POSTED VOUCHERS</span>
-              <div className="kpi-icon-wrap" style={{ background: '#ECFDF5', color: '#059669' }}>
-                <FileCheck size={18} />
-              </div>
-            </div>
-            <div className="kpi-value num">{memberContributions.length}</div>
-            <div className="kpi-desc">Consolidated monthly contributions</div>
-          </div>
+          <KpiCard
+            label="Posted Vouchers"
+            value={memberContributions.length}
+            icon={FileCheck}
+            desc="Consolidated monthly contributions"
+          />
         </div>
 
         {/* Table Card */}
@@ -738,7 +700,7 @@ export const MemberPortal: React.FC = () => {
                     <td>
                       <StatusBadge status={item.entryStatus} size="sm" />
                     </td>
-                    <td style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{item.enteredDate}</td>
+                    <td style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{formatDate(item.enteredDate)}</td>
                     <td style={{ fontSize: '0.75rem' }}>{item.approvedBy || item.enteredBy}</td>
                   </tr>
                 ))}
@@ -835,7 +797,7 @@ export const MemberPortal: React.FC = () => {
               <tbody>
                 {filtered.map((item) => (
                   <tr key={item.id}>
-                    <td style={{ fontWeight: 500 }}>{item.date}</td>
+                    <td style={{ fontWeight: 500 }}>{formatDate(item.date)}</td>
                     <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 600 }}>{item.referenceNo}</td>
                     <td>
                       <span className="badge badge-neutral">{item.transactionType}</span>
@@ -926,7 +888,7 @@ export const MemberPortal: React.FC = () => {
             <span style={{ fontSize: '0.6875rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', fontWeight: 600, display: 'block' }}>
               Monthly Payroll Recovery
             </span>
-            <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#059669' }} className="num">
+            <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-navy-900)' }} className="num">
               {formatCurrency(5200)}
             </span>
             <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', display: 'block' }}>
@@ -975,7 +937,7 @@ export const MemberPortal: React.FC = () => {
           </div>
           <button
             className="btn btn-primary btn-sm"
-            style={{ background: '#059669', borderColor: '#059669' }}
+            style={{ }}
             onClick={() => setIsAdvanceModalOpen(true)}
           >
             <Award size={14} />
@@ -1019,7 +981,7 @@ export const MemberPortal: React.FC = () => {
             <div style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--color-navy-900)', marginBottom: '6px' }}>
               Interest Rate & Terms
             </div>
-            <div style={{ fontSize: '1.375rem', fontWeight: 800, color: '#059669' }}>
+            <div style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--color-navy-900)' }}>
               0% (Interest-Free)
             </div>
             <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>
@@ -1048,7 +1010,7 @@ export const MemberPortal: React.FC = () => {
               Projected Superannuation Date
             </span>
             <span style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--color-navy-900)' }}>
-              31-Aug-2034
+              31/08/2034
             </span>
             <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', display: 'block' }}>
               On reaching age 60
@@ -1223,8 +1185,8 @@ export const MemberPortal: React.FC = () => {
                   width: '32px',
                   height: '32px',
                   borderRadius: '50%',
-                  background: item.type === 'loan' ? '#EFF6FF' : '#ECFDF5',
-                  color: item.type === 'loan' ? 'var(--color-navy-700)' : '#059669',
+                  background: item.type === 'loan' ? '#EFF6FF' : '#F1F5F9',
+                  color: item.type === 'loan' ? 'var(--color-navy-700)' : 'var(--color-navy-600)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -1238,7 +1200,7 @@ export const MemberPortal: React.FC = () => {
                   <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-navy-900)' }}>
                     {item.title}
                   </span>
-                  <span style={{ fontSize: '0.6875rem', color: 'var(--color-text-muted)' }}>{item.timestamp}</span>
+                  <span style={{ fontSize: '0.6875rem', color: 'var(--color-text-muted)' }}>{formatDateTime(item.timestamp)}</span>
                 </div>
                 <div style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)' }}>
                   {item.description}
@@ -1495,7 +1457,7 @@ export const MemberPortal: React.FC = () => {
                     type="text"
                     className="form-input"
                     disabled
-                    value={`${currentMember.fullName} (DOJ: ${currentMember.dateOfJoining} • 22 Yrs)`}
+                    value={`${currentMember.fullName} (DOJ: ${formatDate(currentMember.dateOfJoining)} • 22 Yrs)`}
                   />
                 </div>
 
@@ -1522,7 +1484,7 @@ export const MemberPortal: React.FC = () => {
                 <button type="button" className="btn btn-secondary" onClick={() => setIsAdvanceModalOpen(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary" style={{ background: '#059669', borderColor: '#059669' }}>
+                <button type="submit" className="btn btn-primary">
                   Confirm & Submit Claim
                 </button>
               </div>

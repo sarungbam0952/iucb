@@ -39,6 +39,8 @@ export const Header: React.FC = () => {
         return { title: 'Member Profile', breadcrumb: ['Members', 'Member Profile'] };
       case 'contributions':
         return { title: 'Monthly Contributions', breadcrumb: ['Members', 'Contributions'] };
+      case 'withdrawals':
+        return { title: 'Member Withdrawals', breadcrumb: ['Members', 'Withdrawals'] };
       case 'ledger':
         return { title: 'Individual Account Ledger', breadcrumb: ['Members', 'Account Ledger / Passbook'] };
       case 'nominees':
@@ -47,14 +49,15 @@ export const Header: React.FC = () => {
         return { title: 'Trust Fund Pool Control Centre', breadcrumb: ['Fund Management', 'Trust Fund Pool'] };
       case 'loans':
         return { title: 'Loan Management', breadcrumb: ['Fund Management', 'Loans'] };
+      case 'loan-details':
+        return { title: 'Loan Details', breadcrumb: ['Fund Management', 'Loans', 'Loan Details'] };
       case 'advances':
         return { title: '18-Year Service Advance Tracker', breadcrumb: ['Fund Management', '18-Year Advance'] };
       case 'retirement':
         return { title: 'Retirement Settlement Pipeline', breadcrumb: ['Fund Management', 'Retirement Settlement'] };
-      case 'approvals':
-        return { title: 'Central Approvals Queue', breadcrumb: ['Home', 'Approvals'] };
+      case 'investments':
+        return { title: 'Investment Register', breadcrumb: ['Home', 'Investments'] };
       case 'reports':
-        return { title: 'Financial Reports & Statements', breadcrumb: ['Reports', 'Overview & Exports'] };
       case 'reports-fund-pool':
         return { title: 'Fund Pool Overview Report', breadcrumb: ['Reports', 'Fund Pool Overview'] };
       case 'reports-member-statements':
@@ -65,8 +68,22 @@ export const Header: React.FC = () => {
         return { title: '18-Yr Advance Tracker Report', breadcrumb: ['Reports', '18-Yr Advance Tracker'] };
       case 'reports-retirement-pipeline':
         return { title: 'Retirement Pipeline Report', breadcrumb: ['Reports', 'Retirement Pipeline'] };
+      case 'reports-trust-fund-journal':
+        return { title: 'Trust Fund Activity Journal', breadcrumb: ['Reports', 'Trust Fund Activity Journal'] };
       case 'reports-audit-trail':
         return { title: 'Audit Trail Report', breadcrumb: ['Reports', 'Audit Trail'] };
+      case 'reports-balance-sheet':
+        return { title: 'Balance Sheet', breadcrumb: ['Reports', 'Balance Sheet'] };
+      case 'reports-charge-analysis':
+        return { title: 'Charge Analysis', breadcrumb: ['Reports', 'Charge Analysis'] };
+      case 'reports-profit-loss':
+        return { title: 'Profit & Loss Statement', breadcrumb: ['Reports', 'Profit & Loss Statement'] };
+      case 'reports-loan-report':
+        return { title: 'Loan Report', breadcrumb: ['Reports', 'Loan Report'] };
+      case 'reports-account-statement':
+        return { title: 'Account Statement', breadcrumb: ['Reports', 'Account Statement'] };
+      case 'reports-transfer-scroll':
+        return { title: 'Transfer Scroll', breadcrumb: ['Reports', 'Transfer Scroll'] };
       case 'audit-trail':
         return { title: 'Compliance Audit Trail', breadcrumb: ['Home', 'Audit Trail'] };
       case 'users-roles':
@@ -98,24 +115,23 @@ export const Header: React.FC = () => {
     }
   };
 
-  const meta = getPageMeta(activePage);
+  const breadcrumb = getPageMeta(activePage).breadcrumb;
 
   return (
     <>
       <header className="app-header">
-        {/* Left: Title & Breadcrumbs */}
+        {/* Left: Breadcrumbs only */}
         <div className="header-left">
-          <div className="header-breadcrumb">
-            {meta.breadcrumb.map((crumb, idx) => (
+          <nav className="header-breadcrumb" aria-label="Breadcrumbs">
+            {breadcrumb.map((crumb, idx) => (
               <React.Fragment key={idx}>
                 {idx > 0 && <span className="breadcrumb-sep">/</span>}
-                <span>{crumb}</span>
+                <span className={idx === breadcrumb.length - 1 ? 'breadcrumb-current' : 'breadcrumb-item'}>
+                  {crumb}
+                </span>
               </React.Fragment>
             ))}
-          </div>
-          <div className="header-title-wrap">
-            <h1 className="header-title">{meta.title}</h1>
-          </div>
+          </nav>
         </div>
 
         {/* Right: Search, Live Role Switcher, Notifications, Profile */}
@@ -124,7 +140,6 @@ export const Header: React.FC = () => {
           <div className="search-trigger" onClick={() => setIsSearchOpen(true)}>
             <Search size={15} color="var(--color-text-muted)" />
             <span>Search records...</span>
-            <span className="search-shortcut">Ctrl+K</span>
           </div>
 
           {/* Interactive Role Switcher (Demo Preview Mode) */}
@@ -137,7 +152,7 @@ export const Header: React.FC = () => {
             >
               <option value="Admin">Admin (Full Access)</option>
               <option value="Data Entry">Data Entry (Operational)</option>
-              <option value="Trust Committee">Trust Committee (Decisions)</option>
+              <option value="Trust Committee">Trust Committee (View Only)</option>
               <option value="Member / Employee">Member / Employee (Self-Service)</option>
             </select>
           </div>

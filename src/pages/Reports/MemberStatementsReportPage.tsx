@@ -10,6 +10,8 @@ import {
   BookOpen,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { KpiCard } from '../../components/common/KpiCard';
+import { formatDate } from '../../utils/dateFormat';
 
 export const MemberStatementsReportPage: React.FC = () => {
   const {
@@ -91,49 +93,33 @@ export const MemberStatementsReportPage: React.FC = () => {
 
       {/* 4 SUMMARY METRIC CARDS */}
       <div className="kpi-grid">
-        <div className="kpi-card accent-navy">
-          <div className="kpi-header">
-            <span className="kpi-label">TOTAL REGISTERED MEMBERS</span>
-            <div className="kpi-icon-wrap" style={{ background: '#EFF6FF', color: 'var(--color-navy-900)' }}>
-              <Users size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{members.length}</div>
-          <div className="kpi-desc">100% active regular employees enrolled</div>
-        </div>
+        <KpiCard
+          label="Total Registered Members"
+          value={members.length}
+          icon={Users}
+          desc="100% active regular employees enrolled"
+        />
 
-        <div className="kpi-card accent-emerald">
-          <div className="kpi-header">
-            <span className="kpi-label">TOTAL ACCUMULATED PF BALANCE</span>
-            <div className="kpi-icon-wrap" style={{ background: '#ECFDF5', color: '#059669' }}>
-              <PiggyBank size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(totalBalance)}</div>
-          <div className="kpi-desc">Individual member equity in the Trust</div>
-        </div>
+        <KpiCard
+          label="Total Accumulated PF Balance"
+          value={formatCurrency(totalBalance)}
+          icon={PiggyBank}
+          desc="Individual member equity in the Trust"
+        />
 
-        <div className="kpi-card">
-          <div className="kpi-header">
-            <span className="kpi-label">AVERAGE MEMBER PF ACCRUAL</span>
-            <div className="kpi-icon-wrap">
-              <CheckCircle2 size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{formatCurrency(avgBalance)}</div>
-          <div className="kpi-desc">Mean balance per enrolled bank staff</div>
-        </div>
+        <KpiCard
+          label="Average Member PF Accrual"
+          value={formatCurrency(avgBalance)}
+          icon={CheckCircle2}
+          desc="Mean balance per enrolled bank staff"
+        />
 
-        <div className="kpi-card accent-amber">
-          <div className="kpi-header">
-            <span className="kpi-label">ACTIVE BORROWERS</span>
-            <div className="kpi-icon-wrap" style={{ background: '#FFFBEB', color: '#D97706' }}>
-              <BookOpen size={18} />
-            </div>
-          </div>
-          <div className="kpi-value num">{membersWithLoans}</div>
-          <div className="kpi-desc">Liabilities: {formatCurrency(totalLoanLiabilities)}</div>
-        </div>
+        <KpiCard
+          label="Active Borrowers"
+          value={membersWithLoans}
+          icon={BookOpen}
+          desc={`Liabilities: ${formatCurrency(totalLoanLiabilities)}`}
+        />
       </div>
 
       {/* FILTER & SEARCH TOOLBAR */}
@@ -212,7 +198,7 @@ export const MemberStatementsReportPage: React.FC = () => {
                     <div style={{ fontSize: '0.6875rem', color: 'var(--color-text-muted)' }}>{m.designation}</div>
                   </td>
                   <td>{m.department}</td>
-                  <td style={{ fontSize: '0.8125rem' }}>{m.dateOfJoining}</td>
+                  <td style={{ fontSize: '0.8125rem' }}>{formatDate(m.dateOfJoining)}</td>
                   <td className="align-right num">{formatCurrency(m.salary)}</td>
                   <td className="align-center" style={{ fontWeight: 600 }}>{m.contributionPercentage}%</td>
                   <td className="align-right num" style={{ fontWeight: 700, color: 'var(--color-navy-900)' }}>
@@ -222,7 +208,7 @@ export const MemberStatementsReportPage: React.FC = () => {
                     {m.hasLoan ? (
                       <div>
                         <span className="badge badge-pending">Active Loan</span>
-                        <div style={{ fontSize: '0.6875rem', color: 'var(--color-danger-text)', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
+                        <div style={{ fontSize: '0.6875rem', color: 'var(--color-navy-800)', fontFamily: 'var(--font-mono)', marginTop: '2px', fontWeight: 600 }}>
                           {formatCurrency(m.outstandingLoan)}
                         </div>
                       </div>

@@ -27,7 +27,7 @@ export const SystemSettingsPage: React.FC = () => {
     setTimeout(() => setSavedSuccess(false), 3000);
   };
 
-  if (currentRole === 'Data Entry') {
+  if (currentRole !== 'Admin') {
     return (
       <div className="card" style={{ padding: '36px', textAlign: 'center' }}>
         <Lock size={36} color="#94A3B8" style={{ margin: '0 auto 12px auto' }} />
@@ -35,7 +35,7 @@ export const SystemSettingsPage: React.FC = () => {
           Access Restricted
         </h3>
         <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-secondary)', marginTop: '4px' }}>
-          Data Entry operators do not have permission to modify system configuration parameters. Please contact the Administrator.
+          This page is restricted to System Administrators. {currentRole} users do not have permission to view or modify system configuration parameters.
         </p>
       </div>
     );
